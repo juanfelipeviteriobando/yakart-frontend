@@ -1,0 +1,177 @@
+<header class="topbar">
+  <div class="brand">
+    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><rect rx='8' width='32' height='32' fill='%23ff77b0'/><text x='50%' y='58%' font-size='18' text-anchor='middle' fill='white' font-family='Arial' font-weight='700'>Y</text></svg>" alt="Y" />
+    <div>
+      <h1>YAKART</h1>
+      <p class="tag">Porcenalicron — Pink shop demo</p>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <button class="nav-btn" [class.active]="activePanel==='products'" (click)="showPanel('products')">Productos</button>
+    <button class="nav-btn" [class.active]="activePanel==='clients'" (click)="showPanel('clients')">Clientes</button>
+    <button class="nav-btn" [class.active]="activePanel==='orders'" (click)="showPanel('orders')">Pedidos Personalizados</button>
+    <button class="nav-btn" [class.active]="activePanel==='accessories'" (click)="showPanel('accessories')">Accesorios</button>
+    <button class="nav-btn" [class.active]="activePanel==='cart'" (click)="showPanel('cart')">Carrito (<span id="cartCount">{{cartCount}}</span>)</button>
+  </nav>
+</header>
+
+<main class="container">
+  <!-- Products -->
+  <section *ngIf="activePanel==='products'" class="panel">
+    <div class="toolbar">
+      <div>
+        <input [(ngModel)]="searchQ" (input)="applyFilters()" placeholder="Buscar productos..." />
+        <select [(ngModel)]="filterCategory" (change)="applyFilters()">
+          <option value="">Todas las categorías</option>
+          <option *ngFor="let c of categoriesList()" [value]="c">{{c}}</option>
+        </select>
+      </div>
+      <div>
+        <button (click)="loadProducts()" class="btn small">Actualizar</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <ng-container *ngIf="filteredProducts?.length; else noneProducts">
+        <div *ngFor="let p of filteredProducts" class="card product-card">
+          <img [src]="productImage(p)" [alt]="productName(p)" />
+          <div class="product-title">{{ productName(p) }}</div>
+          <div class="muted">{{ p.category || '' }}</div>
+          <div class="product-price">${{ productPrice(p) }}</div>
+          <div class="muted">Stock: {{ productStock(p) }}</div>
+          <div style="margin-top:8px">
+            <button class="btn" (click)="addToCart(p)">Add to cart</button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noneProducts>
+        <p class="muted">No products found</p>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Clients -->
+  <section *ngIf="activePanel==='clients'" class="panel">
+    <h2>Clientes</h2>
+    <form #clientFormEl="ngForm" class="card formcard" (ngSubmit)="submitClient(clientFormEl)">
+      <input name="nombre" [(ngModel)]="clientForm.nombre" placeholder="Nombre" required />
+      <input name="email" [(ngModel)]="clientForm.email" placeholder="Correo" required />
+      <input name="telefono" [(ngModel)]="clientForm.telefono" placeholder="Teléfono" required />
+      <input name="direccion" [(ngModel)]="clientForm.direccion" placeholder="Dirección" />
+      <button type="submit" class="btn">Crear cliente</button>
+    </form>
+
+    <table class="table">
+      <thead><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Dirección</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let c of clients">
+          <td>{{ c.id_cliente ?? c.id ?? '–' }}</td>
+          <td>{{ c.nombre ?? c.name ?? '' }}</td>
+          <td>{{ c.email ?? '' }}</td>
+          <td>{{ c.telefono ?? c.phone ?? '' }}</td>
+          <td>{{ c.direccion ?? c.address ?? '' }}</td>
+        </tr>
+        <tr *ngIf="clients?.length===0"><td colspan="5">No clients loaded</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Custom Orders -->
+  <section *ngIf="activePanel==='orders'" class="panel">
+    <h2>Crear pedido personalizado</h2>
+    <form #customFormEl="ngForm" class="card formcard" (ngSubmit)="submitCustomOrder(customFormEl)">
+      <input name="id_client" [(ngModel)]="customOrderForm.id_client" placeholder="ID del cliente" required type="number" />
+      <textarea name="description" [(ngModel)]="customOrderForm.description" placeholder="Descripción" required></textarea>
+      <input name="delivery_date" [(ngModel)]="customOrderForm.delivery_date" type="date" required />
+      <input name="estimated_price" [(ngModel)]="customOrderForm.estimated_price" type="number" step="0.01" placeholder="Precio estimado" required />
+      <select name="status" [(ngModel)]="customOrderForm.status">
+        <option value="pending">Pendiente</option>
+        <option value="in progress">En progreso</option>
+        <option value="completed">Completado</option>
+      </select>
+      <input name="size" [(ngModel)]="customOrderForm.size" type="number" placeholder="Tamaño (opcional)" />
+      <input name="image_url" [(ngModel)]="customOrderForm.image_url" placeholder="URL de imagen (opcional)" />
+      <input name="id_sale" [(ngModel)]="customOrderForm.id_sale" type="number" placeholder="ID venta (opcional)" />
+      <button type="submit" class="btn">Crear pedido</button>
+    </form>
+
+    <h3>Pedidos recientes</h3>
+    <div class="list">
+      <div *ngFor="let o of customOrders" class="card">
+        <div style="display:flex;justify-content:space-between">
+          <div>
+            <strong>Order #{{ o.id_order ?? '–' }}</strong>
+            <div class="muted">Client: {{ o.client?.id_cliente ?? o.client?.nombre ?? '-' }}</div>
+            <div class="muted">Status: {{ o.status ?? o.estado ?? '-' }}</div>
+          </div>
+          <div style="text-align:right">
+            <div>{{ o.price ?? o.precio_estimado ?? '—' }}</div>
+            <div class="muted">{{ o.application_date || o.applicationDate || o.delivery_date || '' }}</div>
+          </div>
+        </div>
+        <p>{{ o.description ?? '' }}</p>
+        <div class="muted">Accessories: {{ (o.orderAccessories?.length ?? 0) }}</div>
+      </div>
+      <div *ngIf="customOrders?.length===0"><p class="muted">No orders</p></div>
+    </div>
+  </section>
+
+  <!-- Accessories -->
+  <section *ngIf="activePanel==='accessories'" class="panel">
+    <h2>Accesorios</h2>
+    <form #accFormEl="ngForm" class="card formcard" (ngSubmit)="submitAccessory(accFormEl)">
+      <input name="name" [(ngModel)]="accessoryForm.name" placeholder="Nombre" required />
+      <input name="price" type="number" step="0.01" [(ngModel)]="accessoryForm.price" placeholder="Precio" required />
+      <input name="image_url" [(ngModel)]="accessoryForm.image_url" placeholder="URL de imagen (opcional)" />
+      <textarea name="description" [(ngModel)]="accessoryForm.description" placeholder="Descripción (opcional)"></textarea>
+      <label><input type="checkbox" name="available" [(ngModel)]="accessoryForm.available" /> Disponible</label>
+      <button type="submit" class="btn">Crear accesorio</button>
+    </form>
+
+    <div class="grid" id="accessoriesList">
+      <div *ngFor="let a of accessories" class="card" style="width:220px">
+        <img [src]="a.image_url || 'https://via.placeholder.com/160x90/ffd7eb/ff77b0?text=A'" style="width:160px;height:90px;object-fit:cover;border-radius:6px;display:block;margin:0 auto 8px" />
+        <div style="font-weight:700">{{ a.name }}</div>
+        <div class="muted">${{ (a.price || 0) | number:'1.2-2' }}</div>
+        <div style="margin-top:8px">
+          <button class="btn small" (click)="associateAccessoryPrompt(a.id)">Associate</button>
+        </div>
+      </div>
+      <div *ngIf="accessories?.length===0"><p class="muted">No accessories</p></div>
+    </div>
+  </section>
+
+  <!-- Cart -->
+  <aside *ngIf="activePanel==='cart'" class="panel card cart">
+    <h2>Carrito</h2>
+    <div id="cartItems">
+      <div *ngIf="CART.length===0"><p class="muted">Your cart is empty</p></div>
+      <div *ngFor="let it of CART; let i = index" class="cart-item">
+        <img [src]="it.image || 'https://via.placeholder.com/80x60/ffd7eb/ff77b0?text=Y'" />
+        <div style="flex:1">
+          <div style="font-weight:700">{{ it.name }}</div>
+          <div class="muted">${{ it.unit_price | number:'1.2-2' }} • x {{ it.quantity }}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn small" (click)="changeCartQuantity(i, +1)">+</button>
+          <button class="btn small" (click)="changeCartQuantity(i, -1)">-</button>
+          <button class="btn small" (click)="removeCartItem(i)">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-footer" style="margin-top:12px">
+      <label>ID cliente: <input type="number" [(ngModel)]="checkoutClientId" /></label>
+      <div class="cart-actions" style="margin-top:10px">
+        <button class="btn primary" id="btnCheckout" (click)="checkout()">Finalizar compra</button>
+        <button class="btn" (click)="clearCart()">Vaciar</button>
+      </div>
+      <p id="checkoutMsg" class="muted">{{ checkoutMsg }}</p>
+    </div>
+  </aside>
+</main>
+
+<footer class="footer">
+  <p>YAKART demo • Pink handmade edition</p>
+</footer>

@@ -1,0 +1,240 @@
+:root {
+  --rosa-claro: #ffeef4;
+  --rosa-principal: #ff9ccf;
+  --rosa-oscuro: #ff69b4;
+  --blanco: #ffffff;
+  --gris-suave: #fdf8fa;
+  --texto: #4a3a45;
+}
+
+* { box-sizing: border-box; }
+
+:host { display:block; } /* asegura que los estilos se apliquen correctamente */
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--rosa-claro);
+  background-image: radial-gradient(#ffdce9 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: var(--texto);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* rest of the CSS exactly igual al que enviaste: */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: linear-gradient(90deg, var(--rosa-oscuro), var(--rosa-principal));
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 119, 176, 0.25);
+  border-bottom: 4px solid #ffd1e2;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand img {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+}
+.brand h1 {
+  margin: 0;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.8rem;
+  color: #fff;
+}
+.brand .tag {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* Navegación */
+.nav {
+  display: flex;
+  gap: 8px;
+}
+.nav-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+.nav-btn.active {
+  background: white;
+  color: var(--rosa-oscuro);
+}
+
+/* 🧁 Contenedor */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+  padding: 28px;
+  align-items: start;
+}
+
+/* 🩷 Paneles */
+.panel {
+  background: var(--blanco);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ffddee;
+}
+.hidden { display: none; }
+
+/* 🪄 Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.toolbar input,
+.toolbar select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ffd7eb;
+  background-color: #fff7fa;
+}
+
+/* 💗 Tarjetas y rejillas */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.card {
+  background: var(--blanco);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 6px 16px rgba(255, 119, 176, 0.1);
+}
+.product-card {
+  width: 220px;
+  text-align: center;
+}
+.product-card img {
+  width: 160px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+.product-title {
+  font-weight: 700;
+  color: var(--rosa-oscuro);
+}
+.product-price {
+  color: var(--rosa-principal);
+  font-weight: 700;
+}
+
+/* 📋 Formularios */
+.formcard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.formcard input,
+.formcard textarea,
+.formcard select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ffd7eb;
+  background: #fff9fb;
+}
+
+/* ✨ Botones */
+.btn {
+  background: var(--rosa-principal);
+  border: none;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.btn:hover {
+  background: var(--rosa-oscuro);
+}
+.btn.small {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+.btn.primary {
+  background: var(--rosa-oscuro);
+  color: white;
+}
+
+/* 🛒 Carrito */
+.cart {
+  position: sticky;
+  top: 28px;
+}
+#cartItems {
+  max-height: 380px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cart-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ffd8ec;
+  background-color: #fff8fb;
+}
+.cart-item img {
+  width: 58px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* 📊 Tablas */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+.table th, .table td {
+  padding: 10px;
+  border-bottom: 1px solid #ffe3f1;
+  text-align: left;
+}
+
+/* 💬 Footer */
+.footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.9rem;
+  color: #7a6d78;
+  background-color: #fff0f6;
+  margin-top: 30px;
+}
+
+/* 📱 Responsive */
+@media (max-width: 920px) {
+  .container { grid-template-columns: 1fr; padding: 16px; }
+  .topbar { flex-direction: column; gap: 10px; align-items: flex-start; }
+}
