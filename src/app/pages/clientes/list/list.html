@@ -1,7 +1,41 @@
-<h2>Lista de Clientes</h2>
+<section class="clientes">
+  <h2>Gestión de Clientes</h2>
 
-<ul>
-  <li *ngFor="let c of clientes">
-    {{ c.nombre }} - {{ c.email }}- {{ c.id_cliente }}
-  </li>
-</ul>
+  <form [formGroup]="clienteForm" (ngSubmit)="crearCliente()" class="formulario">
+    <input formControlName="name" placeholder="Nombre" required />
+    <input formControlName="email" placeholder="Correo" required />
+    <input formControlName="phone" placeholder="Teléfono" required />
+    <input formControlName="direction" placeholder="Dirección" />
+    <button type="submit" [disabled]="clienteForm.invalid">Agregar</button>
+  </form>
+
+  <p *ngIf="cargando">Cargando clientes...</p>
+  <p *ngIf="error">{{ error }}</p>
+
+  <table *ngIf="!cargando && clientes.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Dirección</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of clientes">
+        <td>{{ c.id_client }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.phone }}</td>
+        <td>{{ c.direction }}</td>
+        <td>
+          <button (click)="eliminarCliente(c.id_client!)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!cargando && clientes.length === 0">No hay clientes registrados.</p>
+</section>

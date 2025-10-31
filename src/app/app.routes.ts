@@ -1,11 +1,9 @@
 import { Routes } from '@angular/router';
-import { ListComponent } from './pages/clientes/list/list';
-// importa el componente (ruta relativa)
-import { ShopComponent } from './pages/shop/shop.component';
+import { ClientesListComponent } from './pages/clientes/list/list';
+import { Home } from './pages/home/home';
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'clientes', pathMatch: 'full' },
-  { path: 'clientes', component: ListComponent },
-  { path: 'yakart', component: ShopComponent },
+   { path: '', component: Home },
+  { path: 'clientes', component: ClientesListComponent },
 ];

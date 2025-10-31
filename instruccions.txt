@@ -1,0 +1,224 @@
+Perfecto 🔥 Juan, te explico **paso a paso** cómo incluir una **nueva página (componente)** en tu **frontend Angular** (por ejemplo Angular 20.3.7) y conectarla con los demás servicios y rutas del proyecto.
+
+Este proceso sirve tanto para una página de **listado de clientes**, **catálogo**, **tienda**, etc.
+Vamos paso a paso 👇
+
+---
+
+## 🧩 1. Crear la nueva página (componente)
+
+Desde la raíz del proyecto, ejecuta en la terminal:
+
+```bash
+ng g c pages/tienda
+```
+
+Esto crea:
+
+```
+src/app/pages/tienda/
+ ├── tienda.component.ts
+ ├── tienda.component.html
+ ├── tienda.component.scss
+ └── tienda.component.spec.ts
+```
+
+---
+
+## ⚙️ 2. Crear el servicio (si no existe)
+
+Si tu frontend debe conectarse con una API (por ejemplo para obtener productos o clientes), crea un servicio en `src/app/services`.
+
+```bash
+ng g s services/tienda
+```
+
+Esto generará:
+
+```
+src/app/services/tienda.service.ts
+```
+
+---
+
+## 🧠 3. Conectar la página con el servicio
+
+### `src/app/services/tienda.service.ts`
+
+Ejemplo de servicio que consulta la API del backend:
+
+```ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TiendaService {
+  private apiUrl = 'http://localhost:3000/api/productos'; // cambia según tu backend
+
+  constructor(private http: HttpClient) {}
+
+  obtenerProductos(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
+  obtenerProductoPorId(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  crearProducto(data: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, data);
+  }
+}
+```
+
+> 📌 Este servicio usa `HttpClient`, así que asegúrate de tener importado `HttpClientModule` en `app.config.ts`.
+
+---
+
+## 🖼️ 4. Usar el servicio en la nueva página
+
+### `src/app/pages/tienda/tienda.component.ts`
+
+```ts
+import { Component, OnInit } from '@angular/core';
+import { TiendaService } from '../../services/tienda.service';
+
+@Component({
+  selector: 'app-tienda',
+  templateUrl: './tienda.component.html',
+  styleUrls: ['./tienda.component.scss']
+})
+export class TiendaComponent implements OnInit {
+  productos: any[] = [];
+  cargando = true;
+
+  constructor(private tiendaService: TiendaService) {}
+
+  ngOnInit() {
+    this.tiendaService.obtenerProductos().subscribe({
+      next: (data) => {
+        this.productos = data;
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al obtener productos:', err);
+        this.cargando = false;
+      }
+    });
+  }
+}
+```
+
+---
+
+### `src/app/pages/tienda/tienda.component.html`
+
+```html
+<section class="tienda">
+  <h2>Catálogo de Productos</h2>
+
+  <div *ngIf="cargando">Cargando productos...</div>
+
+  <div class="grid" *ngIf="!cargando">
+    <div class="producto" *ngFor="let item of productos">
+      <img [src]="item.imagen || '/assets/img/default.jpg'" alt="{{ item.nombre }}" />
+      <h3>{{ item.nombre }}</h3>
+      <p>{{ item.descripcion }}</p>
+      <span>${{ item.precio }}</span>
+    </div>
+  </div>
+</section>
+```
+
+---
+
+## 🧭 5. Agregar la nueva ruta
+
+Edita tu archivo `app.routes.ts` (o `app-routing.module.ts` según tu estructura):
+
+```ts
+import { Routes } from '@angular/router';
+import { HomeComponent } from './pages/home/home.component';
+import { TiendaComponent } from './pages/tienda/tienda.component';
+
+export const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'tienda', component: TiendaComponent },
+];
+```
+
+---
+
+## 🌐 6. Añadir enlace de navegación
+
+Edita tu menú o `header` (probablemente en `app.html` o `header.component.html`) y agrega un botón:
+
+```html
+<nav>
+  <a routerLink="/">Inicio</a>
+  <a routerLink="/tienda">Catálogo</a>
+</nav>
+```
+
+Angular automáticamente cambiará de página cuando el usuario navegue a `/tienda`.
+
+---
+
+## 🧩 7. Importante: Conectar con el backend (si usas NestJS)
+
+Si tu backend (por ejemplo hecho con **NestJS**) ya tiene un endpoint, verifica que:
+
+* el CORS esté habilitado:
+
+  ```ts
+  app.enableCors({
+    origin: 'http://localhost:4200',
+  });
+  ```
+* y que los endpoints coincidan con el `apiUrl` de tu servicio.
+
+---
+
+## 🧱 8. Estructura final del proyecto
+
+Tu estructura quedaría así:
+
+```
+src/
+ ├── app/
+ │   ├── pages/
+ │   │   ├── home/
+ │   │   ├── tienda/
+ │   │   └── clientes/
+ │   ├── services/
+ │   │   ├── api.ts
+ │   │   ├── clientes.service.ts
+ │   │   └── tienda.service.ts
+ │   ├── app.routes.ts
+ │   └── app.html
+ ├── assets/
+ │   └── img/
+ └── main.ts
+```
+
+---
+
+## 🧠 En resumen
+
+| Paso | Acción                           | Archivo clave                  |
+| ---- | -------------------------------- | ------------------------------ |
+| 1️⃣  | Crear el componente de la página | `ng g c pages/tienda`          |
+| 2️⃣  | Crear el servicio                | `ng g s services/tienda`       |
+| 3️⃣  | Conectar el servicio a la API    | `tienda.service.ts`            |
+| 4️⃣  | Usarlo en el componente          | `tienda.component.ts`          |
+| 5️⃣  | Añadir la ruta                   | `app.routes.ts`                |
+| 6️⃣  | Crear enlace de menú             | `app.html`                     |
+| 7️⃣  | Probar en navegador              | `http://localhost:4200/tienda` |
+
+---
+
+¿Quieres que te deje un ejemplo de **interconexión directa entre dos páginas** (por ejemplo, que desde `home` se pueda abrir un producto individual que se renderice en una página de detalles)?
+Así te muestro cómo pasar parámetros entre rutas (`/producto/:id`) y conectar ambos con el mismo servicio.
