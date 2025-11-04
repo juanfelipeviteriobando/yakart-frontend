@@ -1,15 +1,31 @@
-// product.component.ts
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
+// PrimeNG
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ImageModule } from 'primeng/image';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 import { ProductsService, Product } from '../../services/product';
 import { CartItemsService } from '../../services/cart-item';
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    CardModule,
+    ButtonModule,
+    InputNumberModule,
+    ImageModule,
+    ProgressSpinnerModule
+  ],
   templateUrl: './product.html',
   styleUrls: ['./catalog-product.scss']
 })
@@ -28,45 +44,46 @@ export class ProductComponent implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = idParam ? parseInt(idParam, 10) : null;
     if (!id) {
-      // id inválido, volver al catálogo
       this.router.navigate(['/']);
       return;
     }
+
     this.loading = true;
-    this.productsSvc.getProductById(id).subscribe(prod => {
-      this.product = prod;
-      this.loading = false;
-    }, _ => {
-      this.loading = false;
-      // en caso de error también volver al catálogo
-      this.router.navigate(['/']);
+    this.productsSvc.getProductById(id).subscribe({
+      next: prod => {
+        this.product = prod;
+        this.loading = false;
+      },
+      error: _ => {
+        this.loading = false;
+        this.router.navigate(['/']);
+      }
     });
   }
 
-  inc() { if (this.product && this.qty < (this.product.stock || 9999)) this.qty++; }
-  dec() { if (this.qty > 1) this.qty--; }
-
   addToCart() {
-  if (!this.product || this.product.id_product == null) {
-    console.error('No se puede agregar: producto no cargado o id inválido');
-    return;
-  }
+    if (!this.product || this.product.id_product == null) {
+      console.error('Producto no cargado o id inválido');
+      return;
+    }
 
-  this.adding = true;
-  const cartId = 1;
+    this.adding = true;
+    const cartId = 1;
 
-  this.cartSvc.getCartItems().subscribe(items => {
-    const exist = items.find(i => i.productid === this.product!.id_product && i.cartid === cartId);
+    this.cartSvc.getCartItems().subscribe({
+      next: items => {
+        const exist = items.find(
+          i => i.productid === this.product!.id_product && i.cartid === cartId
+        );
 
-    if (exist && exist.id) {
-      const newQty = exist.quantity + this.qty;
-      this.cartSvc.updateCartItem(exist.id, { quantity: newQty })
-        .subscribe({
-          next: _ => this.adding = false,
-          error: _ => this.adding = false
-        });
-    } else {
-      const productid = this.product?.id_product;
+        if (exist && exist.id) {
+          const newQty = exist.quantity + this.qty;
+          this.cartSvc.updateCartItem(exist.id, { quantity: newQty }).subscribe({
+            next: () => (this.adding = false),
+            error: () => (this.adding = false)
+          });
+        } else {
+          const productid = this.product?.id_product;
 if (productid == null) {
   console.error('No se puede agregar al carrito: id de producto inválido.');
   this.adding = false;
@@ -85,8 +102,9 @@ this.cartSvc.createCartItem(payload).subscribe(
   _ => this.adding = false
 );
 
-    }
-  }, _ => this.adding = false);
-}
-
+        }
+      },
+      error: () => (this.adding = false)
+    });
+  }
 }

@@ -1,19 +1,22 @@
 /* catalog-product.styles.scss */
-/* Variables básicas */
-$bg: #fdebea;
-$card-bg: #ffeef0;
-$accent: #c63b52;
-$text: #7a2a33;
-$muted: #d8b8b8;
+/* 🌸 Paleta pastel rosada */
+$bg: #fff6f8;
+$card-bg: #ffeef5;
+$accent: #e97ba6;
+$accent-light: #f9c8dc;
+$accent-dark: #d9628c;
+$text: #6b2c44;
+$muted: #d8a9b8;
 
+/* 🌸 Tipografía y fondo general */
 .catalog-root, .product-root {
   font-family: 'Inter', Arial, sans-serif;
   color: $text;
   padding: 24px;
-  background: linear-gradient(180deg, $bg 0%, #fff 100%);
+  background: linear-gradient(180deg, $bg 0%, #ffffff 100%);
 }
 
-/* Controles */
+/* 🌸 Controles */
 .catalog-controls {
   display: flex;
   justify-content: space-between;
@@ -23,124 +26,225 @@ $muted: #d8b8b8;
 
   label {
     font-size: 14px;
-    select { margin-left: 8px; padding: 6px 8px; border-radius: 6px; border: 1px solid $muted; }
+    color: $text;
+    select {
+      margin-left: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid $accent-light;
+      background: #fff;
+      color: $text;
+      transition: all 0.2s ease;
+      &:focus {
+        outline: none;
+        border-color: $accent;
+        box-shadow: 0 0 4px rgba($accent, 0.4);
+      }
+    }
   }
 }
 
-/* Grid */
+/* 🌸 Grid */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 20px;
 }
 
+/* 🌸 Tarjetas de producto */
 .product-card {
   background: $card-bg;
-  border-radius: 8px;
-  padding: 12px;
+  border-radius: 14px;
+  padding: 16px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   height: 100%;
-  box-shadow: 0 2px 0 rgba(0,0,0,0.03);
-  transition: transform .12s ease;
-  &:hover { transform: translateY(-4px); }
+  box-shadow: 0 4px 8px rgba(233, 123, 166, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid rgba($accent-light, 0.6);
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 14px rgba(233, 123, 166, 0.15);
+  }
 
   .thumb {
-    height: 170px;
+    height: 180px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    background: #fff;
 
     img { width: 100%; height: 100%; object-fit: cover; display:block; }
     .placeholder { color: $muted; font-size: 14px; }
   }
 
-  .meta { flex: 1;
-    .prod-name { margin:0 0 6px 0; font-size: 16px; }
-    .prod-small { font-size: 12px; color: darken($muted, 10%); margin-bottom: 6px;}
-    .prod-price { color: $accent; font-weight: 700; }
+  .meta {
+    flex: 1;
+    .prod-name { margin: 0 0 6px 0; font-size: 17px; font-weight: 600; color: $text; }
+    .prod-small { font-size: 12px; color: darken($muted, 10%); margin-bottom: 6px; }
+    .prod-price { color: $accent-dark; font-weight: 700; font-size: 16px; }
   }
 
-  .card-actions { margin-top: 10px;
+  .card-actions {
+    margin-top: 10px;
+
     .btn-add {
-      background: transparent;
-      border: 1px solid $accent;
-      color: $accent;
-      padding: 8px 10px;
+      background: linear-gradient(90deg, $accent 0%, $accent-light 100%);
+      border: none;
+      color: white;
+      padding: 9px 12px;
       border-radius: 12px;
-      width:100%;
+      width: 100%;
+      font-weight: 600;
+      transition: background 0.25s ease, transform 0.1s ease;
+      &:hover {
+        background: linear-gradient(90deg, $accent-dark 0%, $accent 100%);
+        transform: translateY(-2px);
+      }
     }
   }
 }
 
-/* paginación */
+/* 🌸 Paginación */
 .pagination {
-  display:flex;
-  gap:8px;
-  justify-content:center;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
   margin-top: 22px;
+
   button {
-    padding:8px 12px;
-    border-radius:8px;
-    border:1px solid #f0d9db;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid $accent-light;
     background: #fff;
-    &.active { background: $accent; color: #fff; border-color: darken($accent, 6%); }
+    color: $accent-dark;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $accent-light;
+    }
+
+    &.active {
+      background: $accent;
+      color: #fff;
+      border-color: $accent-dark;
+    }
   }
 }
 
-/* product page */
+/* 🌸 Página de producto */
 .product-top {
-  display:flex;
+  display: flex;
   gap: 28px;
   align-items: flex-start;
   margin-bottom: 28px;
 
-  .left-col { flex: 1;
+  .left-col {
+    flex: 1;
     .main-image {
-      border-radius: 8px;
+      border-radius: 10px;
       overflow: hidden;
       background: #fff;
-      img { width:100%; height:420px; object-fit:cover; display:block; }
-      .placeholder-large { height:420px; display:flex; align-items:center; justify-content:center; color:$muted; }
+      box-shadow: 0 2px 8px rgba($accent, 0.08);
+
+      img { width: 100%; height: 420px; object-fit: cover; display: block; }
+      .placeholder-large { height: 420px; display: flex; align-items: center; justify-content: center; color: $muted; }
     }
   }
 
-  .right-col { width:420px; background: $card-bg; padding:18px; border-radius:8px;
-    .product-title { margin:0 0 8px 0; font-size:28px; color:$accent; }
-    .product-price { font-size:20px; font-weight:700; margin-bottom:12px; }
-    .product-desc { color: darken($muted, 8%); margin-bottom:12px; }
+  .right-col {
+    width: 420px;
+    background: $card-bg;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba($accent, 0.08);
 
-    .add-controls { display:flex; gap:12px; align-items:center; margin-top:8px;
-      .qty-control { display:flex; align-items:center; border:1px solid $muted; border-radius:8px; overflow:hidden;
-        button { padding:8px 10px; background:transparent; border:0; }
-        input { width:56px; text-align:center; border-left:1px solid $muted; border-right:1px solid $muted; padding:6px; }
+    .product-title { margin: 0 0 8px 0; font-size: 28px; color: $accent-dark; }
+    .product-price { font-size: 22px; font-weight: 700; margin-bottom: 12px; color: $accent; }
+    .product-desc { color: darken($muted, 8%); margin-bottom: 12px; }
+
+    .add-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 8px;
+
+      .qty-control {
+        display: flex;
+        align-items: center;
+        border: 1px solid $accent-light;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #fff;
+
+        button {
+          padding: 8px 10px;
+          background: transparent;
+          border: 0;
+          color: $accent-dark;
+          font-weight: 700;
+        }
+
+        input {
+          width: 56px;
+          text-align: center;
+          border-left: 1px solid $accent-light;
+          border-right: 1px solid $accent-light;
+          padding: 6px;
+          color: $text;
+        }
       }
+
       .btn-add-big {
-        padding:10px 18px;
-        border-radius:12px;
-        border: 2px solid $accent;
-        background:transparent;
-        color:$accent;
-        font-weight:700;
+        padding: 10px 18px;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(90deg, $accent 0%, $accent-light 100%);
+        color: #fff;
+        font-weight: 700;
+        transition: background 0.25s ease;
+        &:hover {
+          background: linear-gradient(90deg, $accent-dark 0%, $accent 100%);
+        }
       }
     }
   }
 }
 
-/* bottom description */
+/* 🌸 Sección inferior */
 .product-bottom {
-  h3 { color: $accent; }
-  .gallery { display:flex; gap:12px; margin-top:12px;
-    .gallery-item { width: 48%; border-radius:8px; overflow:hidden;
-      img { width:100%; height:180px; object-fit:cover; display:block; }
+  h3 { color: $accent-dark; }
+  .gallery {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+
+    .gallery-item {
+      width: 48%;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba($accent, 0.08);
+
+      img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+      }
     }
   }
 }
 
-/* util */
-.loading { text-align:center; padding:20px; color:$muted; font-weight:600; }
+/* 🌸 Estado de carga */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: $muted;
+  font-weight: 600;
+}

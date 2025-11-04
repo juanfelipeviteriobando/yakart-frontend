@@ -1,57 +1,101 @@
-<!-- catalog.component.html -->
-<section class="catalog-root">
-  <div class="catalog-controls">
-    <div class="left-controls">
-      <label>
-        Filtrar categoría:
-        <select [(ngModel)]="selectedCategory" (change)="applyFilters()">
-          <option value="all">Todas</option>
-          <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
-        </select>
-      </label>
+<section class="catalog-root p-fluid">
+  <div class="catalog-controls p-d-flex p-jc-between p-ai-center p-mb-3">
+    <!-- Filtro de categoría -->
+    <div class="left-controls p-field p-mr-2">
+      <label for="categorySelect" class="p-d-block p-mb-1">Filtrar categoría:</label>
+      <select
+        id="categorySelect"
+        class="p-inputtext p-component"
+        [(ngModel)]="selectedCategory"
+        (change)="applyFilters()"
+      >
+        <option value="all">Todas</option>
+        <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+      </select>
     </div>
 
-    <div class="right-controls">
-      <label>
-        Mostrar
-        <select [(ngModel)]="pageSize" (change)="changePageSize(+pageSize)">
-          <option *ngFor="let s of pageSizeOptions" [value]="s">{{ s }}</option>
-        </select>
-        productos por página
-      </label>
+    <!-- Control de tamaño de página -->
+    <div class="right-controls p-field">
+      <label for="pageSizeSelect" class="p-d-block p-mb-1">Mostrar</label>
+      <select
+        id="pageSizeSelect"
+        class="p-inputtext p-component"
+        [(ngModel)]="pageSize"
+        (change)="changePageSize(+pageSize)"
+      >
+        <option *ngFor="let s of pageSizeOptions" [value]="s">{{ s }}</option>
+      </select>
+      <span class="p-ml-2">productos por página</span>
     </div>
   </div>
 
-  <div *ngIf="loading" class="loading">Cargando productos…</div>
+  <p *ngIf="loading" class="p-text-secondary p-my-4">Cargando productos…</p>
 
-  <div class="products-grid">
-    <article class="product-card" *ngFor="let product of displayedProducts" (click)="openProduct(product)">
-      <div class="thumb">
-        <img *ngIf="product.image_url" [src]="product.image_url" [alt]="product.name" />
-        <div *ngIf="!product.image_url" class="placeholder">Sin imagen</div>
-      </div>
-      <div class="meta">
-        <h3 class="prod-name">{{ product.name }}</h3>
-        <div class="prod-small">Tamaño: {{ product.size }} cm</div>
-        <div class="prod-price">c/u ${{ product.price }}</div>
-      </div>
+  <!-- Rejilla de productos -->
+  <div class="products-grid p-grid">
+    <div
+      class="p-col-12 p-md-4 p-lg-3"
+      *ngFor="let product of displayedProducts"
+      (click)="openProduct(product)"
+    >
+      <div class="product-card p-card p-shadow-3 p-p-3 p-d-flex p-flex-column">
+        <div class="thumb p-text-center p-mb-2">
+          <img
+            *ngIf="product.image_url"
+            [src]="product.image_url"
+            [alt]="product.name"
+            class="p-mb-2"
+            style="max-width: 100%; border-radius: 8px"
+          />
+          <div *ngIf="!product.image_url" class="p-text-secondary">Sin imagen</div>
+        </div>
 
-      <div class="card-actions">
-        <button class="btn-add" (click)="addToCart($event, product, 1)">
-          {{ addingToCartId === product.id_product ? 'Añadiendo...' : 'Añadir al carrito' }}
-        </button>
+        <div class="meta p-mb-3">
+          <h3 class="p-text-bold">{{ product.name }}</h3>
+          <div class="p-text-secondary">Tamaño: {{ product.size }} cm</div>
+          <div class="p-mt-1 p-text-bold">c/u ${{ product.price }}</div>
+        </div>
+
+        <div class="card-actions p-mt-auto">
+          <button
+            class="p-button p-button-success p-button-sm w-full"
+            (click)="addToCart($event, product, 1)"
+            [disabled]="addingToCartId === product.id_product"
+          >
+            <i class="pi pi-shopping-cart p-mr-2"></i>
+            {{ addingToCartId === product.id_product ? 'Añadiendo...' : 'Añadir al carrito' }}
+          </button>
+        </div>
       </div>
-    </article>
+    </div>
   </div>
 
-  <!-- paginación -->
-  <nav class="pagination" *ngIf="totalPages > 1">
-    <button (click)="prevPage()" [disabled]="currentPage === 1">anterior</button>
+  <!-- Paginación -->
+  <nav class="pagination p-d-flex p-jc-center p-ai-center p-mt-4" *ngIf="totalPages > 1">
+    <button
+      class="p-button p-button-text p-mr-2"
+      (click)="prevPage()"
+      [disabled]="currentPage === 1"
+    >
+      <i class="pi pi-angle-left p-mr-1"></i> Anterior
+    </button>
 
     <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
-      <button class="page-num" [class.active]="currentPage === (i+1)" (click)="gotoPage(i+1)">{{ i+1 }}</button>
+      <button
+        class="p-button p-mx-1"
+        [class.p-button-outlined]="currentPage !== (i + 1)"
+        (click)="gotoPage(i + 1)"
+      >
+        {{ i + 1 }}
+      </button>
     </ng-container>
 
-    <button (click)="nextPage()" [disabled]="currentPage === totalPages">siguiente</button>
+    <button
+      class="p-button p-button-text p-ml-2"
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages"
+    >
+      Siguiente <i class="pi pi-angle-right p-ml-1"></i>
+    </button>
   </nav>
 </section>

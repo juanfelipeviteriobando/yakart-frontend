@@ -1,51 +1,85 @@
 <!-- product.component.html -->
 <section class="product-root" *ngIf="product; else loadingTpl">
-  <div class="product-top">
-    <div class="left-col">
-      <div class="main-image">
-        <img *ngIf="product.image_url" [src]="product.image_url" [alt]="product.name" />
-        <div *ngIf="!product.image_url" class="placeholder-large">Sin imagen</div>
-      </div>
-      <!-- si tienes más imágenes podrías mostrarlas aquí como miniaturas -->
+  <div class="product-top grid">
+    <!-- Imagen principal -->
+    <div class="col-12 md:col-6">
+      <p-card>
+        <ng-container *ngIf="product.image_url; else noImg">
+          <p-image
+            [src]="product.image_url"
+            [alt]="product.name"
+            width="100%"
+            [preview]="true"
+          ></p-image>
+        </ng-container>
+        <ng-template #noImg>
+          <div class="p-text-center p-py-6">🖼️ Sin imagen disponible</div>
+        </ng-template>
+      </p-card>
     </div>
 
-    <aside class="right-col">
-      <h1 class="product-title">{{ product.name }}</h1>
-      <div class="product-price">c/u ${{ product.price }}</div>
-      <div class="product-desc">{{ product.description }}</div>
+    <!-- Info producto -->
+    <div class="col-12 md:col-6">
+      <p-card>
+        <h1 class="text-2xl font-bold mb-2">{{ product.name }}</h1>
+        <div class="text-xl text-primary mb-3">💰 ${{ product.price }}</div>
 
-      <div class="product-size">
-        <strong>Tamaño:</strong> {{ product.size }} cm
-      </div>
+        <p class="mb-4">{{ product.description }}</p>
 
-      <div class="add-controls">
-        <div class="qty-control">
-          <button (click)="dec()">-</button>
-          <input type="number" [(ngModel)]="qty" min="1" />
-          <button (click)="inc()">+</button>
+        <p class="mb-3">
+          <strong>Tamaño:</strong> {{ product.size }} cm
+        </p>
+
+        <!-- Controles -->
+        <div class="flex align-items-center gap-3 mb-4">
+          <p-inputNumber
+            [(ngModel)]="qty"
+            [min]="1"
+            [max]="product.stock || 9999"
+            mode="decimal"
+            showButtons
+            buttonLayout="horizontal"
+            decrementButtonClass="p-button-danger"
+            incrementButtonClass="p-button-success"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus"
+          ></p-inputNumber>
+
+          <p-button
+            label="{{ adding ? 'Añadiendo...' : 'Añadir al carrito' }}"
+            icon="pi pi-shopping-cart"
+            [disabled]="adding"
+            (onClick)="addToCart()"
+            styleClass="p-button-lg p-button-rounded"
+          ></p-button>
         </div>
-
-        <button class="btn-add-big" (click)="addToCart()" [disabled]="adding">
-          {{ adding ? 'Añadiendo...' : 'Añadir al carrito' }}
-        </button>
-      </div>
-    </aside>
+      </p-card>
+    </div>
   </div>
 
-  <!-- descripción larga / imágenes extra -->
-  <div class="product-bottom">
-    <h3>Description</h3>
-    <p>{{ product.description }}</p>
+  <!-- descripción larga / galería -->
+  <div class="product-bottom mt-5">
+    <p-card header="Descripción Detallada">
+      <p>{{ product.description }}</p>
 
-    <!-- galería simple de ejemplo -->
-    <div class="gallery">
-      <div class="gallery-item" *ngIf="product.image_url">
-        <img [src]="product.image_url" alt="imagen extra" />
+      <div class="gallery mt-4 flex flex-wrap gap-3">
+        <div class="gallery-item" *ngIf="product.image_url">
+          <p-image
+            [src]="product.image_url"
+            alt="Imagen extra"
+            width="200"
+            [preview]="true"
+          ></p-image>
+        </div>
       </div>
-    </div>
+    </p-card>
   </div>
 </section>
 
+<!-- Loading -->
 <ng-template #loadingTpl>
-  <div class="loading">Cargando producto…</div>
+  <div class="flex justify-content-center align-items-center p-6">
+    <p-progressSpinner></p-progressSpinner>
+    <span class="ml-3">Cargando producto…</span>
+  </div>
 </ng-template>
