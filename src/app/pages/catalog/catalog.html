@@ -1,0 +1,57 @@
+<!-- catalog.component.html -->
+<section class="catalog-root">
+  <div class="catalog-controls">
+    <div class="left-controls">
+      <label>
+        Filtrar categoría:
+        <select [(ngModel)]="selectedCategory" (change)="applyFilters()">
+          <option value="all">Todas</option>
+          <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="right-controls">
+      <label>
+        Mostrar
+        <select [(ngModel)]="pageSize" (change)="changePageSize(+pageSize)">
+          <option *ngFor="let s of pageSizeOptions" [value]="s">{{ s }}</option>
+        </select>
+        productos por página
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">Cargando productos…</div>
+
+  <div class="products-grid">
+    <article class="product-card" *ngFor="let product of displayedProducts" (click)="openProduct(product)">
+      <div class="thumb">
+        <img *ngIf="product.image_url" [src]="product.image_url" [alt]="product.name" />
+        <div *ngIf="!product.image_url" class="placeholder">Sin imagen</div>
+      </div>
+      <div class="meta">
+        <h3 class="prod-name">{{ product.name }}</h3>
+        <div class="prod-small">Tamaño: {{ product.size }} cm</div>
+        <div class="prod-price">c/u ${{ product.price }}</div>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn-add" (click)="addToCart($event, product, 1)">
+          {{ addingToCartId === product.id_product ? 'Añadiendo...' : 'Añadir al carrito' }}
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <!-- paginación -->
+  <nav class="pagination" *ngIf="totalPages > 1">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">anterior</button>
+
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button class="page-num" [class.active]="currentPage === (i+1)" (click)="gotoPage(i+1)">{{ i+1 }}</button>
+    </ng-container>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">siguiente</button>
+  </nav>
+</section>
