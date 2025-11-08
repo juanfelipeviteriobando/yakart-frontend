@@ -13,7 +13,7 @@ import { LayoutService } from '../service/layout.service';
   <header class="yakart-topbar">
     <div class="yakart-topbar-inner">
       <!-- Logo -->
-      <a routerLink="/" class="yakart-logo">
+      <a routerLink="/" class="yakart-logo"> 
         <img src="src/assets/img/yakart-logo.png" alt="YakArt" />
       </a>
 
