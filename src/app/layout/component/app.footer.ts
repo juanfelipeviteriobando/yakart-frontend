@@ -12,18 +12,18 @@ import { RouterLink } from '@angular/router';
       <div class="col-brand">
         <h3 class="brand-title">YakArt.</h3>
         <p class="follow-text">sígueme en mis redes:</p>
-        <div class="socials">
-          <a href="#" aria-label="Instagram"><img src="assets/icons/instagram.svg" alt="Instagram" class="w-5 h-5" /></a>
-          <a href="#" aria-label="WhatsApp"><img src="assets/icons/whatsapp.svg" alt="WhatsApp"></a>
-          <a href="#" aria-label="Facebook"><img src="assets/icons/facebook.svg" alt="Facebook"></a>
-          <a href="#" aria-label="TikTok"><img src="assets/icons/tiktok.svg" alt="TikTok"></a>
+        <div class="socials flex gap-3 items-center justify-center">
+          <a href="#" aria-label="Instagram"><img src="../../../../icons/instagram.svg" alt="Instagram" class="w-5 h-5" /></a>
+          <a href="#" aria-label="WhatsApp"><img src="../../../../icons/whatsapp.svg" alt="WhatsApp" class="w-5 h-5" /></a>
+          <a href="#" aria-label="Facebook"><img src="../../../../icons/facebook.svg" alt="Facebook" class="w-5 h-5" /></a>
+          <a href="#" aria-label="TikTok"><img src="../../../../icons/tiktok.svg" alt="TikTok" class="w-5 h-5" /></a>
         </div>
       </div>
 
       <div class="col-links">
         <h4>Links</h4>
         <ul>
-          <li><a routerLink="/home">Pagina principal</a></li>
+          <li><a routerLink="/">Pagina principal</a></li>
           <li><a routerLink="/catalog">Catalogo</a></li>
           <li><a routerLink="/faq">preguntas frecuentes</a></li>
           <li><a routerLink="/contact">contactanos</a></li>

@@ -3,3 +3,10 @@
 @use './layout/layout.scss';
 @use 'primeicons/primeicons.css';
 @use './demo/demo.scss';
+body {
+  background-image: url('img/hero-bg.jpg');
+  background-size: cover;      /* ajusta la imagen al tamaño de pantalla */
+  background-repeat: repeat;
+  background-position: center;
+  background-attachment: fixed; /* opcional, hace que el fondo no se mueva */
+}

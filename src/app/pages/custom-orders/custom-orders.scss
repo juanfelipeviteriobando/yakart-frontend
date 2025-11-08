@@ -1,0 +1,65 @@
+.custom-orders-root {
+  background: #fff7f8;
+  border-radius: 2rem;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(255, 192, 203, 0.3);
+  max-width: 600px;
+  margin: 2rem auto;
+  font-family: 'Inter', sans-serif;
+  color: #7a2a33;
+
+  h2 {
+    text-align: center;
+    color: #c63b52;
+    margin-bottom: 1.5rem;
+  }
+
+  .field {
+    margin-bottom: 1rem;
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    input, p-inputnumber, p-calendar {
+      width: 100%;
+    }
+
+    &.two-cols {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+
+  .preview {
+    text-align: center;
+    margin-bottom: 1rem;
+
+    img {
+      width: 120px;
+      height: 120px;
+      border-radius: 1rem;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+  }
+
+  .total {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .remove {
+    background: #ffcccc;
+    color: #7a2a33;
+    margin-left: 0.5rem;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    background: #c63b52;
+    border: none;
+  }
+}

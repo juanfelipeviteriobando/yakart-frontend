@@ -12,15 +12,18 @@ import { LayoutService } from '../service/layout.service';
   template: `
   <header class="yakart-topbar">
     <div class="yakart-topbar-inner">
+                  <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
+                <i class="pi pi-bars"></i>
+            </button>
       <!-- Logo -->
       <a routerLink="/" class="yakart-logo"> 
-        <img src="src/assets/img/yakart-logo.png" alt="YakArt" />
+        <img src="../../../../img/yakart-logo.png" alt="YakArt" />
       </a>
 
       <!-- Menú central -->
       <nav class="yakart-nav">
         <a routerLink="/" routerLinkActive="active">Página Principal</a>
-        <a routerLink="/clientes" routerLinkActive="active">Catálogo</a>
+        <a routerLink="/catalog" routerLinkActive="active">Catálogo</a>
         <a routerLink="/faq" routerLinkActive="active">Preguntas Frecuentes</a>
         <a routerLink="/contacto" routerLinkActive="active">Contáctanos</a>
       </nav>
