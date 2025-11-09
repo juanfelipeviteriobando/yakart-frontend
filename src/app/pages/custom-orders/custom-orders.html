@@ -43,55 +43,62 @@
     </label>
 
     <!-- Fecha entrega -->
-    <label class="block">
-      <span class="font-semibold text-pink-700">Fecha de entrega</span>
-      <input
-        type="date"
-        [(ngModel)]="newOrder.delivery_date"
-        name="delivery_date"
-        class="w-full p-2 rounded border border-pink-300 focus:outline-pink-600"
-      />
-    </label>
+<!-- Fecha entrega -->
+<label class="block">
+  <span class="font-semibold text-pink-700">Fecha de entrega</span>
+  <input
+    type="date"
+    [value]="newOrder.delivery_date | date:'yyyy-MM-dd'"
+    (change)="onDeliveryDateChange($event)"
+    name="delivery_date"
+    class="w-full p-2 rounded border border-pink-300 focus:outline-pink-600"
+  />
+</label>
+
+
 
     <!-- Accesorios -->
     <div>
       <span class="font-semibold text-pink-700">Accesorios disponibles</span>
       <div class="grid grid-cols-2 gap-2 mt-2">
-        <div *ngFor="let acc of accessories" class="flex items-center gap-2 p-2 bg-white rounded-lg border border-pink-200 shadow-sm">
+        <div
+          *ngFor="let acc of accessories"
+          class="flex items-center gap-2 p-2 border border-pink-200 rounded-lg hover:bg-pink-100"
+        >
           <input
             type="checkbox"
-            [value]="acc.id"
-            [(ngModel)]="selectedAccessories"
-            name="selectedAccessories"
-            (change)="calcularPrecio()"
+            [checked]="selectedAccessories.includes(acc.id)"
+            (change)="toggleAccessory(acc.id, $event.target.checked)"
           />
           <div>
-            <p class="font-medium text-gray-800">{{ acc.name }}</p>
-            <p class="text-sm text-gray-500">${{ acc.price }}</p>
+            <p class="font-medium">{{ acc.name }}</p>
+            <p class="text-sm text-gray-500">{{ acc.price | currency: 'USD':'symbol' }}</p>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Subida de imagen -->
-    <div class="card bg-white rounded-xl shadow p-4">
-      <div class="font-semibold text-pink-700 mb-2">Imagen de referencia</div>
-      <p-fileupload
-        mode="advanced"
-        name="file"
-        accept="image/*"
-        maxFileSize="1000000"
-        chooseLabel="Seleccionar imagen"
-        uploadLabel="Subir"
-        cancelLabel="Cancelar"
-        (onUpload)="onUpload($event)"
-        [auto]="true"
-      ></p-fileupload>
+<div class="card bg-white rounded-xl shadow p-4">
+  <div class="font-semibold text-pink-700 mb-2">Imagen de referencia</div>
 
-      <div *ngIf="uploadedImageUrl" class="mt-4">
-        <img [src]="uploadedImageUrl" alt="Vista previa" class="w-40 rounded-lg shadow" />
-      </div>
-    </div>
+  <p-fileupload
+    mode="advanced"
+    name="file"
+    accept="image/*"
+    maxFileSize="2000000"
+    chooseLabel="Seleccionar imagen"
+    uploadLabel="Subir"
+    cancelLabel="Cancelar"
+    [customUpload]="true"
+    (uploadHandler)="uploadImage($event)"
+  ></p-fileupload>
+
+  <div *ngIf="uploadedImageUrl" class="mt-4">
+    <img [src]="uploadedImageUrl" alt="Vista previa" class="w-40 rounded-lg shadow" />
+  </div>
+</div>
+
 
     <button
       (click)="crearOrden()"
@@ -109,4 +116,31 @@
     </p>
     <p class="text-sm text-gray-500">El precio puede variar según materiales y complejidad.</p>
   </div>
+</div>
+
+<!-- 📜 Órdenes anteriores -->
+<div class="mt-10 bg-white rounded-2xl shadow-lg p-6 border border-pink-200">
+  <h3 class="text-xl font-bold text-pink-700 mb-4">Órdenes anteriores</h3>
+
+  <div *ngIf="customOrders.length === 0" class="text-gray-500 italic">
+    No hay órdenes registradas aún.
+  </div>
+
+  <ul *ngIf="customOrders.length > 0" class="space-y-3">
+    <li
+      *ngFor="let order of customOrders"
+      class="p-4 border border-pink-100 rounded-lg hover:bg-pink-50"
+    >
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="font-semibold text-pink-700">{{ order.description }}</p>
+          <p class="text-sm text-gray-600">
+            Entrega: {{ order.delivery_date | date: 'shortDate' }} |
+            Tamaño: {{ order.size }}
+          </p>
+        </div>
+        <span class="text-pink-600 font-bold">{{ order.price | currency: 'USD':'symbol' }}</span>
+      </div>
+    </li>
+  </ul>
 </div>
