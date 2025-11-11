@@ -42,9 +42,11 @@ export class ProductComponent implements OnInit {
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
+    console.log(idParam)
     const id = idParam ? parseInt(idParam, 10) : null;
+    console.log(id)
     if (!id) {
-      this.router.navigate(['/']);
+      //this.router.navigate(['/']);
       return;
     }
 

@@ -1,19 +1,23 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { Product } from './product'; 
 export interface CartItem {
   id?: number;
   cartid: number;      // ID del carrito al que pertenece
   productid: number;   // ID del producto asociado
   quantity: number;
   price: number;
+
+   // 👇 este es el producto completo que viene del backend
+  product?: Product;
 }
 export interface CreateCartItemDto {
   cartid: number;
   productid: number;
   quantity: number;
   price: number;
+  
 }
 
 @Injectable({

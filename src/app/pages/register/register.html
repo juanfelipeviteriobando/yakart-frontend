@@ -1,0 +1,70 @@
+<div class="register-container">
+  <p-card class="register-card">
+    <h2 class="title">Crea tu cuenta 🌷</h2>
+    <p class="subtitle">Únete a YakArt y empieza a crear tu estilo</p>
+
+    <div class="form-group">
+      <label for="username">Nombre de usuario</label>
+      <input pInputText id="username" [(ngModel)]="username" placeholder="Ej: juanperez" />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Correo electrónico</label>
+      <input pInputText id="email" type="email" [(ngModel)]="email" placeholder="juan@example.com" />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Contraseña</label>
+      <p-password
+        [(ngModel)]="password"
+        [toggleMask]="true"
+        [feedback]="true"
+        id="password"
+        placeholder="••••••••"
+      ></p-password>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Teléfono</label>
+      <input pInputText id="phone" [(ngModel)]="phone" placeholder="+57 300 123 4567" />
+    </div>
+
+    <div class="form-group">
+      <label for="direction">Dirección</label>
+      <input pInputText id="direction" [(ngModel)]="direction" placeholder="Calle 123 #45-67" />
+    </div>
+
+    <p-message
+      *ngIf="successMessage"
+      severity="success"
+      text="{{ successMessage }}"
+      class="fade-in"
+    ></p-message>
+
+    <p-message
+      *ngIf="errorMessage"
+      severity="error"
+      text="{{ errorMessage }}"
+      class="fade-in"
+    ></p-message>
+
+    <button
+      pButton
+      label="{{ loading ? 'Registrando...' : 'Registrarme' }}"
+      icon="pi pi-user-plus"
+      class="pink-btn"
+      [disabled]="loading"
+      (click)="register()"
+    ></button>
+
+    <p-divider align="center" class="divider-text">¿Ya tienes cuenta?</p-divider>
+
+    <button
+      pButton
+      label="Iniciar sesión"
+      icon="pi pi-sign-in"
+      class="white-btn"
+      (click)="login()"
+    ></button>
+  </p-card>
+</div>

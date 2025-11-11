@@ -1,0 +1,86 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  background: linear-gradient(180deg, #ffeef1 0%, #fde5e8 100%);
+  font-family: 'Inter', sans-serif;
+}
+
+.register-card {
+  width: 400px;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 20px rgba(198, 59, 82, 0.15);
+  background-color: #fff0f3;
+}
+
+.title {
+  color: #c63b52;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #a35460;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.2rem;
+
+  label {
+    color: #7a2a33;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  input, p-password {
+    width: 100%;
+  }
+}
+
+.pink-btn {
+  width: 100%;
+  background: #c63b52;
+  border: none;
+  font-weight: 600;
+  border-radius: 1rem;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: #e04a6b;
+  }
+}
+
+.white-btn {
+  width: 100%;
+  background: #fff;
+  color: #c63b52;
+  border: 2px solid #c63b52;
+  border-radius: 1rem;
+  font-weight: 600;
+
+  &:hover {
+    background: #ffeef0;
+  }
+}
+
+.divider-text {
+  color: #c63b52;
+  font-weight: 600;
+}
+
+.fade-in {
+  animation: fade 0.4s ease-in-out;
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

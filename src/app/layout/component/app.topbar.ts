@@ -57,7 +57,7 @@ import { LayoutService } from '../service/layout.service';
 
         <!-- Íconos adicionales -->
         <a routerLink="/buscar" class="icon-btn"><i class="pi pi-search"></i></a>
-        <a routerLink="/carrito" class="icon-btn"><i class="pi pi-shopping-cart"></i></a>
+        <a routerLink="/cart" class="icon-btn"><i class="pi pi-shopping-cart"></i></a>
         <a routerLink="/perfil" class="icon-btn"><i class="pi pi-user"></i></a>
       </div>
     </div>

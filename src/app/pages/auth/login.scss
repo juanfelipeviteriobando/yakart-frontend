@@ -1,0 +1,9 @@
+:host {
+  display: block;
+  background: var(--surface-ground);
+  min-height: 100vh;
+}
+
+.surface-card {
+  border: 1px solid var(--surface-border);
+}
