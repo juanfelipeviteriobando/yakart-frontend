@@ -1,299 +1,153 @@
-/* =====================================
-   YAKART — Style SCSS
-   ===================================== */
-
-/* ---------- Variables ---------- */
-$color-bg: #ffe6ea;
-$color-primary: #f9b6c0;
-$color-accent: #f8a2b1;
-$color-text: #7a3a42;
-$color-white: #fff;
-$color-light: #ffeef2;
-$color-card: #fff4f6;
-$shadow-soft: 0 4px 10px rgba(0, 0, 0, 0.05);
-
-$font-primary: 'Poppins', sans-serif;
-$font-secondary: 'Quicksand', sans-serif;
-
-/* ---------- Global Reset ---------- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.home-root {
+  background-color: #ffeef0;
+  font-family: 'Inter', sans-serif;
+  color: #7a2a33;
 }
 
-body {
-  font-family: $font-primary;
-  background-color: $color-bg;
-  color: $color-text;
-  background-image: radial-gradient(#ffd6de 1px, transparent 1px),
-    radial-gradient(#ffd6de 1px, transparent 1px);
-  background-size: 30px 30px;
-  background-position: 0 0, 15px 15px;
-  overflow-x: hidden;
-}
-
-/* ---------- Header ---------- */
-header {
-  background-color: $color-white;
-  box-shadow: $shadow-soft;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-
-  .brand img {
-    height: 40px;
-  }
-
-  nav a {
-    margin: 0 1rem;
-    text-decoration: none;
-    color: $color-text;
-    font-weight: 500;
-    transition: color 0.3s;
-
-    &:hover {
-      color: $color-accent;
-    }
-  }
-
-  .icons {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    i {
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-  }
-}
-
-/* ---------- Hero Section ---------- */
-.hero {
+/* Banner */
+.banner {
+  background: url('/../../../../img/yakart-poster.png') center/cover no-repeat;
   position: relative;
-  text-align: center;
-  background-color: $color-bg;
-  img {
-    width: 100%;
-    max-height: 500px;
-    object-fit: cover;
-  }
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  .hero-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba($color-white, 0.8);
-    border-radius: 15px;
-    padding: 2rem 3rem;
-    max-width: 450px;
-    text-align: left;
+  .overlay {
+    background: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-    h2 {
-      color: $color-text;
-      font-size: 1.8rem;
-      font-weight: 700;
+    h1 {
+      color: #c63b52;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
     }
 
-    p {
-      color: #555;
-      font-size: 0.95rem;
-      margin-top: 0.5rem;
-    }
-
-    .btn-primary {
-      display: inline-block;
-      background-color: $color-accent;
-      color: $color-white;
-      border: none;
-      border-radius: 10px;
-      padding: 0.8rem 1.5rem;
+    button {
       margin-top: 1rem;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.3s;
-
+      background-color: #c63b52;
+      border: none;
+      color: #fff;
+      padding: 0.8rem 1.2rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
       &:hover {
-        background-color: darken($color-accent, 5%);
+        background-color: #a32c40;
       }
     }
   }
 }
 
-/* ---------- Productos ---------- */
-section.productos {
-  padding: 4rem 2rem;
+/* Productos */
+.productos {
   text-align: center;
+  padding: 2rem 1rem;
+  cursor: pointer;
 
   h2 {
-    color: $color-text;
-    font-weight: 700;
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    color: #c63b52;
+    margin-bottom: 1.5rem;
   }
 
-  p {
-    color: #666;
-    font-size: 0.9rem;
-  }
-
-  .grid {
+  .productos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
 
-    .card {
-      background-color: $color-card;
-      border-radius: 15px;
-      box-shadow: $shadow-soft;
-      overflow: hidden;
-      transition: transform 0.3s;
-
+    .producto {
+      background: #fdebea;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
       &:hover {
-        transform: translateY(-5px);
+        transform: scale(1.05);
       }
 
       img {
         width: 100%;
-        height: 250px;
+        height: 160px;
         object-fit: cover;
+        border-radius: 0.5rem;
       }
 
-      .info {
-        padding: 1rem;
-        h3 {
-          color: $color-text;
-          font-size: 1.1rem;
-          font-weight: 600;
-        }
-        p {
-          color: #555;
-          font-size: 0.9rem;
-          margin-top: 0.3rem;
-        }
+      h3 {
+        margin-top: 0.5rem;
       }
     }
   }
 }
 
-/* ---------- Otros productos ---------- */
-section.otros {
-  padding: 2rem;
-  h3 {
-    text-align: center;
-    color: $color-text;
-    margin-bottom: 2rem;
-  }
+/* Carousel */
+.otros {
+  padding: 2rem 1rem;
+  text-align: center;
 
-  .gallery {
+  .carousel {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+
+    .slide {
+      min-width: 200px;
+      background: #ffeef0;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      img {
+        width: 100%;
+        height: 150px;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        object-fit: cover;
+      }
+
+      .info {
+        padding: 0.5rem;
+      }
+    }
+  }
+}
+
+/* Custom Orders */
+.custom-orders {
+  padding: 2rem 1rem;
+  text-align: center;
+  background: #fdebea;
+
+  .orders-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 1.5rem;
+    gap: 1rem;
 
-    .item {
-      background-color: $color-card;
-      border-radius: 10px;
-      box-shadow: $shadow-soft;
-      overflow: hidden;
-      text-align: center;
-      padding-bottom: 1rem;
+    .order {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
       img {
         width: 100%;
         height: 150px;
         object-fit: cover;
+        border-radius: 0.5rem;
       }
 
-      h4 {
-        font-size: 1rem;
+      p {
         margin-top: 0.5rem;
-        color: $color-text;
-      }
-
-      .price {
-        color: $color-accent;
-        font-weight: 600;
-      }
-
-      .btn {
-        margin-top: 0.5rem;
-        background-color: $color-accent;
-        color: $color-white;
-        padding: 0.4rem 0.8rem;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: background 0.3s;
-
-        &:hover {
-          background-color: darken($color-accent, 10%);
-        }
+        color: #7a2a33;
       }
     }
-  }
-}
-
-/* ---------- Footer ---------- */
-footer {
-  background-color: $color-light;
-  padding: 3rem 2rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 2rem;
-  border-top: 2px solid $color-primary;
-
-  .column {
-    flex: 1;
-    min-width: 200px;
-
-    h4 {
-      font-size: 1rem;
-      color: $color-text;
-      margin-bottom: 1rem;
-    }
-
-    a {
-      display: block;
-      color: #666;
-      text-decoration: none;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-      transition: color 0.3s;
-
-      &:hover {
-        color: $color-accent;
-      }
-    }
-  }
-
-  .social {
-    display: flex;
-    gap: 1rem;
-
-    a {
-      font-size: 1.3rem;
-      color: $color-text;
-      transition: color 0.3s;
-
-      &:hover {
-        color: $color-accent;
-      }
-    }
-  }
-
-  .copy {
-    width: 100%;
-    text-align: center;
-    margin-top: 2rem;
-    font-size: 0.8rem;
-    color: #999;
   }
 }

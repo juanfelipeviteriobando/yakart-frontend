@@ -1,134 +1,47 @@
-<!-- ==============================
-     HERO SECTION
-============================== -->
-<section class="hero">
-  <img src="../../../../img/yakart-logo.png" alt="YakArt Toppers Personalizados" />
-  <div class="hero-content">
-    <div class="hero-text">
-      <h2>Crea tu pedido personalizado</h2>
-      <p>En YakArt puedes hacer tu pedido a tu gusto</p>
-      <a href="#" class="btn-primary">Pedido personalizado</a>
+<div class="home-root">
+  <!-- Sección de banner personalizado -->
+  <section class="banner">
+    <div class="overlay">
+      <h1>Yakart Toppers Personalizados</h1>
+      <p>Crea tu pedido personalizado</p>
+      <button (click)="irACustomOrders()">Haz tu pedido</button>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ==============================
-     PRODUCTOS
-============================== -->
-<section class="productos">
-  <h2>PRODUCTOS</h2>
-  <p>Puedes encontrar esto y mucho más...</p>
-
-  <div class="grid productos-grid">
-    <div class="card producto">
-      <img src="../../../../img/yakart-logo.png" alt="Recuerdos" />
-      <div class="info">
-        <h3>Recuerdos</h3>
+  <!-- Sección de productos -->
+  <section class="productos" (click)="irACatalogo()">
+    <h2>Productos</h2>
+    <div class="productos-grid">
+      <div class="producto" *ngFor="let p of productos">
+        <img [src]="p.image_url" [alt]="p.name" />
+        <h3>{{ p.name }}</h3>
+        <p>${{ p.price }}</p>
       </div>
     </div>
+  </section>
 
-    <div class="card producto">
-      <img src="../../../../img/yakart-logo.png" alt="Regalos" />
-      <div class="info">
-        <h3>Regalos</h3>
+  <!-- Sección de otros productos (carousel) -->
+  <section class="otros">
+    <h2>Otros productos</h2>
+    <div class="carousel">
+      <div class="slide" *ngFor="let p of otrosProductos" (click)="irAProducto(p.id_product!)">
+        <img [src]="p.image_url" [alt]="p.name" />
+        <div class="info">
+          <h3>{{ p.name }}</h3>
+          <p>${{ p.price }}</p>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="card producto">
-      <img src="../../../../img/yakart-logo.png" alt="Llaveros" />
-      <div class="info">
-        <h3>Llaveros</h3>
+  <!-- Sección de custom orders aleatorios -->
+  <section class="custom-orders">
+    <h2>#YakArt</h2>
+    <div class="orders-grid">
+      <div class="order" *ngFor="let o of customOrders">
+        <img [src]="o.image_url" [alt]="o.description" />
+        <p>{{ o.description }}</p>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ==============================
-     OTROS PRODUCTOS
-============================== -->
-<section class="otros">
-  <h3>Otros productos</h3>
-
-  <div class="gallery otros-grid">
-    <div class="item">
-      <img src="../../../../img/yakart-logo.png" alt="Ángel" />
-      <div class="info">
-        <h4>Ángel</h4>
-        <p class="price">c/u $4500</p>
-      </div>
-    </div>
-
-    <div class="item">
-      <img src="../../../../img/yakart-logo.png" alt="Decoración navideña" />
-      <div class="info">
-        <h4>Decoración navideña</h4>
-        <p class="price">c/u $4500</p>
-      </div>
-    </div>
-
-    <div class="item">
-      <img src="../../../../img/yakart-logo.png" alt="Pesebres" />
-      <div class="info">
-        <h4>Pesebres</h4>
-        <p class="price">c/u $7000</p>
-      </div>
-    </div>
-
-    <div class="item">
-      <img src="../../../../img/yakart-logo.png" alt="Recuerdo de boda" />
-      <div class="info">
-        <h4>Recuerdo de boda</h4>
-        <p class="price">c/u $6000</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==============================
-     GALERÍA / REDES
-============================== -->
-<section class="galeria">
-  <h3>Comparte tus compras en <span>#YakArt</span></h3>
-  <div class="galeria-grid">
-    <img src="../../../../img/yakart-logo.png" alt="YakArt 1" />
-    <img src="../../../../img/yakart-logo.png" alt="YakArt 2" />
-    <img src="../../../../img/yakart-logo.png" alt="YakArt 3" />
-    <img src="../../../../img/yakart-logo.png" alt="YakArt 4" />
-    <img src="../../../../img/yakart-logo.png" alt="YakArt 5" />
-    <img src="../../../../img/yakart-logo.png" alt="YakArt 6" />
-  </div>
-</section>
-
-<!-- ==============================
-     FOOTER
-============================== -->
-<footer>
-  <div class="footer-content">
-    <div class="col">
-      <h4>YakArt.</h4>
-      <p>Síguenos en nuestras redes:</p>
-      <div class="social">
-        <a href="#"><i class="bi bi-instagram"></i></a>
-        <a href="#"><i class="bi bi-whatsapp"></i></a>
-        <a href="#"><i class="bi bi-tiktok"></i></a>
-      </div>
-    </div>
-
-    <div class="col">
-      <h4>Links</h4>
-      <a href="#">Página principal</a>
-      <a href="#">Catálogo</a>
-      <a href="#">Preguntas frecuentes</a>
-      <a href="#">Contáctanos</a>
-    </div>
-
-    <div class="col">
-      <h4>Help</h4>
-      <a href="#">Opciones de pago</a>
-      <a href="#">Reintegros</a>
-      <a href="#">Políticas de privacidad</a>
-    </div>
-  </div>
-
-  <p class="copy">2025. All rights reserved</p>
-</footer>
+  </section>
+</div>

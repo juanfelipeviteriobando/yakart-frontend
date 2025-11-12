@@ -1,0 +1,55 @@
+<section class="contact-section">
+  <div class="banner">
+    <img src="../../../../img/yakart-logo.png" alt="YakArt" />
+    <div class="banner-text">
+      <h2>Contactanos</h2>
+      <p>Página principal > Contactanos</p>
+    </div>
+    <img src="../../../../img/yakart-logo.png" alt="YakArt" />
+  </div>
+
+  <div class="contact-content">
+    <h3>Ponte en contacto con nosotros.</h3>
+    <p>
+      Para obtener más información sobre nuestros productos y servicios, no
+      dudes en enviarnos un correo electrónico. Nuestro equipo siempre estará
+      disponible para ayudarte. ¡No lo pienses dos veces!
+    </p>
+
+    <div class="contact-container">
+      <div class="info">
+        <div class="info-item">
+          <i class="pi pi-map-marker"></i>
+          <h4>Dirección</h4>
+          <p>carrera 27 #37 a 28 - villa nueva - Pasto</p>
+        </div>
+        <div class="info-item">
+          <i class="pi pi-phone"></i>
+          <h4>Phone</h4>
+          <p>celular: (+57) 320 716 0193</p>
+        </div>
+        <div class="info-item">
+          <i class="pi pi-clock"></i>
+          <h4>Tiempo disponible</h4>
+          <p>lunes - viernes: 7:00 - 18:00 <br />sábados: 7:00 - 14:00</p>
+        </div>
+      </div>
+
+      <form class="form" (ngSubmit)="sendEmail()" #contactForm="ngForm">
+        <label>Nombre*</label>
+        <input type="text" name="name" [(ngModel)]="form.name" required placeholder="Nombre completo" />
+
+        <label>Correo electrónico*</label>
+        <input type="email" name="email" [(ngModel)]="form.email" required placeholder="ejemplo@ejemplo.com" />
+
+        <label>Asunto</label>
+        <input type="text" name="subject" [(ngModel)]="form.subject" placeholder="Asunto" />
+
+        <label>Mensaje*</label>
+        <textarea name="message" [(ngModel)]="form.message" required placeholder="Escribe tu mensaje"></textarea>
+
+        <button type="submit" [disabled]="!contactForm.valid">Enviar</button>
+      </form>
+    </div>
+  </div>
+</section>

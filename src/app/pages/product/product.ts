@@ -46,7 +46,7 @@ export class ProductComponent implements OnInit {
     const id = idParam ? parseInt(idParam, 10) : null;
     console.log(id)
     if (!id) {
-      //this.router.navigate(['/']);
+      this.router.navigate(['/auth/login']);
       return;
     }
 
@@ -70,7 +70,7 @@ export class ProductComponent implements OnInit {
     }
 
     this.adding = true;
-    const cartId = 1;
+    const cartId = 1;//<--remplazar cuando este listo
 
     this.cartSvc.getCartItems().subscribe({
       next: items => {
@@ -93,7 +93,7 @@ if (productid == null) {
 }
 
 const payload = {
-  cartid: 1,
+  cartid: 1,//<--remplazar cuando este listo
   productid,        // 🔥 ya garantizado que no es undefined
   quantity: this.qty,
   price: this.product!.price

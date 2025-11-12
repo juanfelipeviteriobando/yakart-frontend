@@ -25,7 +25,7 @@ import { LayoutService } from '../service/layout.service';
         <a routerLink="/" routerLinkActive="active">Página Principal</a>
         <a routerLink="/catalog" routerLinkActive="active">Catálogo</a>
         <a routerLink="/faq" routerLinkActive="active">Preguntas Frecuentes</a>
-        <a routerLink="/contacto" routerLinkActive="active">Contáctanos</a>
+        <a routerLink="/contact" routerLinkActive="active">Contáctanos</a>
       </nav>
 
       <!-- Acciones a la derecha -->

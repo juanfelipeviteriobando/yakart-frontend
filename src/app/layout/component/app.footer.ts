@@ -8,6 +8,30 @@ import { RouterLink } from '@angular/router';
   imports: [CommonModule, RouterLink],
   template: `
   <footer class="yak-footer">
+    <!-- SECCIÓN INFERIOR DE ICONOS -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-10 text-center">
+  <div class="p-4 bg-[#ffeef0] rounded-xl shadow-sm flex flex-col items-center">
+    <i class="pi pi-star text-pink-500 text-3xl mb-2"></i>
+    <h3 class="text-pink-700 font-semibold">Buena Calidad</h3>
+    <p class="text-sm text-gray-600">Productos seleccionados cuidadosamente</p>
+  </div>
+  <div class="p-4 bg-[#ffeef0] rounded-xl shadow-sm flex flex-col items-center">
+    <i class="pi pi-shield text-pink-500 text-3xl mb-2"></i>
+    <h3 class="text-pink-700 font-semibold">Garantía Segura</h3>
+    <p class="text-sm text-gray-600">Tus compras están protegidas</p>
+  </div>
+  <div class="p-4 bg-[#ffeef0] rounded-xl shadow-sm flex flex-col items-center">
+    <i class="pi pi-send text-pink-500 text-3xl mb-2"></i>
+    <h3 class="text-pink-700 font-semibold">Envío Gratis</h3>
+    <p class="text-sm text-gray-600">En compras superiores a $100</p>
+  </div>
+  <div class="p-4 bg-[#ffeef0] rounded-xl shadow-sm flex flex-col items-center">
+    <i class="pi pi-headphones text-pink-500 text-3xl mb-2"></i>
+    <h3 class="text-pink-700 font-semibold">Soporte 24/7</h3>
+    <p class="text-sm text-gray-600">Atención personalizada para ti</p>
+  </div>
+</div>
+
     <div class="yak-footer-inner">
       <div class="col-brand">
         <h3 class="brand-title">YakArt.</h3>

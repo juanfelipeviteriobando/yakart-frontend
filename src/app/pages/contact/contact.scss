@@ -1,0 +1,119 @@
+.contact-section {
+  background-color: #ffe9f0;
+  font-family: 'Poppins', sans-serif;
+  color: #8a1f4e;
+  text-align: center;
+  padding-bottom: 3rem;
+
+  .banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fbdce3;
+    padding: 1rem;
+    img {
+      width: 120px;
+      border-radius: 50%;
+    }
+    .banner-text {
+      margin: 0 2rem;
+      h2 {
+        font-size: 2rem;
+        font-weight: 600;
+      }
+      p {
+        font-size: 0.9rem;
+        color: #b26c7e;
+      }
+    }
+  }
+
+  .contact-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    h3 {
+      font-size: 1.5rem;
+      color: #b0266b;
+      font-weight: 600;
+    }
+    p {
+      font-size: 0.95rem;
+      color: #8a1f4e;
+      margin-bottom: 2rem;
+    }
+
+    .contact-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 2rem;
+
+      .info {
+        flex: 1;
+        min-width: 250px;
+        text-align: left;
+        .info-item {
+          margin-bottom: 1.5rem;
+          i {
+            font-size: 1.5rem;
+            color: #c8437b;
+            margin-right: 0.5rem;
+          }
+          h4 {
+            font-weight: bold;
+          }
+          p {
+            margin: 0;
+            font-size: 0.9rem;
+          }
+        }
+      }
+
+      .form {
+        flex: 1;
+        min-width: 280px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        text-align: left;
+
+        label {
+          font-weight: 500;
+          color: #8a1f4e;
+        }
+
+        input,
+        textarea {
+          border: 1px solid #c8437b;
+          border-radius: 6px;
+          padding: 0.6rem;
+          font-size: 0.9rem;
+          outline: none;
+        }
+
+        textarea {
+          height: 100px;
+          resize: none;
+        }
+
+        button {
+          background-color: #e68cb4;
+          border: none;
+          padding: 0.7rem;
+          border-radius: 6px;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          transition: 0.3s;
+          &:hover {
+            background-color: #d26fa0;
+          }
+          &:disabled {
+            background-color: #f5bcd6;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}

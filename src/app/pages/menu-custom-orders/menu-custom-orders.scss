@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+select {
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid #f8b4d9;
+  background-color: #fff5f5;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+select:focus {
+  outline: none;
+  border-color: #f28cb2;
+  box-shadow: 0 0 3px #f28cb2;
+}
+
+.p-button-success {
+  background-color: #f28cb2;
+  border: none;
+  &:hover {
+    background-color: #e36c9e;
+  }
+}
