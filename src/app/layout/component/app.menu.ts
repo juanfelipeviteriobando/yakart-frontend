@@ -16,7 +16,46 @@ import { AuthService } from '../../services/auth';
         <li *ngIf="item.separator" class="menu-separator"></li>
       </ng-container>
     </ul>
-  `
+  `,
+  styles: [`
+    /* Fondo general del menú */
+    .layout-menu {
+      background-color: #ffe6f0; /* rosa pastel suave */
+      padding: 10px;
+      border-radius: 12px;
+      list-style: none;
+      margin: 0;
+    }
+
+    /* Estilos de cada item del menú */
+    .layout-menu li {
+      padding: 10px 15px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      transition: background-color 0.3s, color 0.3s;
+      cursor: pointer;
+      color: #663366; /* violeta suave para el texto */
+      font-weight: 500;
+    }
+
+    /* Hover sobre cada item */
+    .layout-menu li:hover {
+      background-color: #ffb3d9; /* rosa un poco más intenso al pasar el mouse */
+      color: #fff;
+    }
+
+    /* Separadores del menú */
+    .menu-separator {
+      height: 1px;
+      background-color: #ffccd9; /* rosa pastel más claro */
+      margin: 8px 0;
+    }
+
+    /* Iconos de PrimeNG (si quieres más suave) */
+    .layout-menu li .pi {
+      margin-right: 8px;
+    }
+  `]
 })
 export class AppMenu implements OnInit {
   model: MenuItem[] = [];
@@ -54,7 +93,7 @@ export class AppMenu implements OnInit {
       {
         label: 'Documentación',
         items: [
-          { label: 'Ver documentación', icon: 'pi pi-fw pi-book', routerLink: ['/documentation'] },
+          { label: 'PREGUNTAS FRECUENTES', icon: 'pi pi-fw pi-book', routerLink: ['/documentation'] },
         ],
       },
       {

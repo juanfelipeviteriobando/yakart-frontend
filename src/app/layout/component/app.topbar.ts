@@ -24,7 +24,7 @@ import { LayoutService } from '../service/layout.service';
       <nav class="yakart-nav">
         <a routerLink="/" routerLinkActive="active">Página Principal</a>
         <a routerLink="/catalog" routerLinkActive="active">Catálogo</a>
-        <a routerLink="/faq" routerLinkActive="active">Preguntas Frecuentes</a>
+        <a routerLink="/documentation" routerLinkActive="active">Preguntas Frecuentes</a>
         <a routerLink="/contact" routerLinkActive="active">Contáctanos</a>
       </nav>
 
@@ -56,9 +56,9 @@ import { LayoutService } from '../service/layout.service';
         </div>
 
         <!-- Íconos adicionales -->
-        <a routerLink="/buscar" class="icon-btn"><i class="pi pi-search"></i></a>
+        <a routerLink="/search" class="icon-btn"><i class="pi pi-search"></i></a>
         <a routerLink="/cart" class="icon-btn"><i class="pi pi-shopping-cart"></i></a>
-        <a routerLink="/perfil" class="icon-btn"><i class="pi pi-user"></i></a>
+        <a routerLink="/profile" class="icon-btn"><i class="pi pi-user"></i></a>
       </div>
     </div>
   </header>

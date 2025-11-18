@@ -58,7 +58,7 @@ export class ProductComponent implements OnInit {
       },
       error: _ => {
         this.loading = false;
-        this.router.navigate(['/']);
+        //this.router.navigate(['/product/1']);
       }
     });
   }

@@ -49,7 +49,7 @@ import { RouterLink } from '@angular/router';
         <ul>
           <li><a routerLink="/">Pagina principal</a></li>
           <li><a routerLink="/catalog">Catalogo</a></li>
-          <li><a routerLink="/faq">preguntas frecuentes</a></li>
+          <li><a routerLink="/documentation">preguntas frecuentes</a></li>
           <li><a routerLink="/contact">contactanos</a></li>
         </ul>
       </div>

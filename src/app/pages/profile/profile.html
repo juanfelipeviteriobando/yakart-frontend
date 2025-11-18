@@ -1,0 +1,64 @@
+<div class="profile-root" *ngIf="!cargando; else loading">
+  <div class="profile-card">
+
+    <div class="header-section">
+      <div class="avatar">{{ cliente?.name?.charAt(0)?.toUpperCase() }}</div>
+      <div>
+        <h2>{{ cliente?.name }}</h2>
+        <p class="email">{{ cliente?.email }}</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn ghost" (click)="activarEdicion()" *ngIf="!editMode">Editar perfil</button>
+      <button class="btn logout" (click)="logout()">Cerrar sesión</button>
+    </div>
+
+    <hr />
+
+    <!-- Mensaje -->
+    <p class="message" *ngIf="mensaje">{{ mensaje }}</p>
+
+    <!-- Vista -->
+    <div *ngIf="!editMode" class="info-grid">
+      <div class="item">
+        <label>Teléfono</label>
+        <p>{{ cliente?.phone || '-' }}</p>
+      </div>
+
+      <div class="item">
+        <label>Dirección</label>
+        <p>{{ cliente?.direction || '-' }}</p>
+      </div>
+    </div>
+
+    <!-- Edición -->
+    <form *ngIf="editMode" class="edit-form" (ngSubmit)="guardarCambios()">
+      <label>
+        Nombre
+        <input type="text" [(ngModel)]="cliente.name" name="name" />
+      </label>
+
+      <label>
+        Teléfono
+        <input type="text" [(ngModel)]="cliente.phone" name="phone" />
+      </label>
+
+      <label>
+        Dirección
+        <input type="text" [(ngModel)]="cliente.direction" name="direction" />
+      </label>
+
+      <div class="form-actions">
+        <button class="btn primary" type="submit">Guardar cambios</button>
+        <button type="button" class="btn ghost" (click)="cancelarEdicion()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="profile-root">
+    <p>Cargando perfil...</p>
+  </div>
+</ng-template>

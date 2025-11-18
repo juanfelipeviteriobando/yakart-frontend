@@ -1,0 +1,30 @@
+<div class="search-container">
+  <h2>Buscar productos</h2>
+
+  <input
+    type="text"
+    placeholder="Buscar por nombre o categoría..."
+    [(ngModel)]="searchTerm"
+    (input)="onSearch()"
+  />
+
+  <div class="results">
+    <div
+      *ngFor="let product of filteredProducts"
+      class="product-card"
+      (click)="goToProduct(product)"
+    >
+      <img [src]="product.image_url" alt="{{ product.name }}" />
+
+      <div class="info">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <span class="price">{{ product.price | currency:'USD' }}</span>
+      </div>
+    </div>
+
+    <p *ngIf="filteredProducts.length === 0" class="no-results">
+      No se encontraron productos.
+    </p>
+  </div>
+</div>

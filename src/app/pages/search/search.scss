@@ -1,0 +1,119 @@
+.search-container {
+  max-width: 650px;
+  margin: 50px auto;
+  padding: 25px;
+  background-color: #fdebea;
+  border-bottom: 2px solid #ffc5ce;
+  border-radius: 18px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  font-family: "Inter", sans-serif;
+  animation: fadeIn 0.3s ease-out;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ff4f8b;
+    font-weight: 700;
+    font-size: 1.8rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 1px solid #ffc2d6;
+    outline: none;
+    background: #fff;
+    font-size: 1rem;
+    transition: 0.2s;
+
+    &:focus {
+      border-color: #ff8fb5;
+      box-shadow: 0 0 6px rgba(255, 121, 155, 0.4);
+    }
+
+    &::placeholder {
+      color: #c47a96;
+    }
+  }
+}
+
+.results {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  .product-card {
+    display: flex;
+    gap: 15px;
+    padding: 16px;
+    background: #fff7fa;
+    border: 1px solid #ffe0ea;
+    border-radius: 16px;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(255, 150, 170, 0.3);
+    }
+
+    img {
+      width: 85px;
+      height: 85px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 2px solid #ffb6cf;
+    }
+
+    .info {
+      flex: 1;
+
+      h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #444;
+      }
+
+      p {
+        margin: 3px 0 8px;
+        color: #777;
+        font-size: 0.95rem;
+      }
+
+      .price {
+        font-weight: 700;
+        color: #ff4f8b;
+        background: #ffe3ef;
+        padding: 4px 10px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .no-results {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 20px;
+    color: #c44771;
+    background: #ffe3ef;
+    padding: 12px;
+    border-radius: 12px;
+  }
+}
+
+// Animación suave como el otro componente
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -14,6 +14,8 @@ import { HomeComponent } from './app/pages/home/home';
 import { authGuard } from './app/guards/auth.guard';
 import { AdminProductsComponent } from './app/pages/menu-products/menu-products';
 import { ContactComponent } from './app/pages/contact/contact';
+import { ProfileComponent } from './app/pages/profile/profile';
+import { SearchComponent } from './app/pages/search/search';
 import { AdminCustomOrdersComponent } from './app/pages/menu-custom-orders/menu-custom-orders';
 import { AuthService } from './app/services/auth';
 
@@ -32,7 +34,8 @@ export const appRoutes: Routes = [
       { path: 'cart', component: CartComponent, canActivate: [authGuard] },
       { path: 'contact', component: ContactComponent },
       { path: 'product/:id', component: ProductComponent },
-
+      { path: 'search', component: SearchComponent },
+      { path: 'profile', component: ProfileComponent,canActivate: [authGuard] },
       // 🔸 Ruta protegida solo para administradores
       {
         path: 'menu-products',
