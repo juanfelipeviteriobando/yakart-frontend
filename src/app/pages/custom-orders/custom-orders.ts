@@ -7,8 +7,7 @@ import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageService } from 'primeng/api';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-
+import { HttpClient, HttpClientModule,HttpHeaders } from '@angular/common/http';
 import { CustomOrdersService, CustomOrder } from '../../services/custom-orders';
 import { OrderAccessoriesService } from '../../services/order-accessories';
 import { AccessoriesService, Accessory } from '../../services/accessories';
@@ -91,32 +90,64 @@ export class CustomOrdersComponent implements OnInit {
   }
 
   /** 🔹 Subida real al backend NestJS */
-  uploadImage(event: any): void {
-    const file = event.files[0];
-    if (!file) return;
+ /** 🔹 Subida real al backend NestJS (con autorización JWT) */
+uploadImage(event: any): void {
+  const file = event.files[0];
+  if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
+  // 🔸 Obtener token JWT
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'No autenticado',
+      detail: 'Por favor, inicia sesión para subir imágenes.',
+    });
+    // Si tienes Router importado (p. ej. via inject Router)
+    // this.router.navigate(['/auth/login']);
+    return;
+  }
 
-    this.http.post<{ imageUrl: string }>(this.uploadApiUrl, formData).subscribe({
-      next: (res) => {
-        this.uploadedImageUrl = res.imageUrl; // URL del backend (p. ej. http://localhost:3000/uploads/img.png)
+  // 🔸 Preparar cabeceras con autorización
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+  });
+
+  // 🔸 Preparar archivo para envío
+  const formData = new FormData();
+  formData.append('file', file);
+
+  // 🔸 Hacer petición POST al backend NestJS
+  this.http.post<{ imageUrl: string }>(this.uploadApiUrl, formData, { headers }).subscribe({
+    next: (res) => {
+      this.uploadedImageUrl = res.imageUrl;
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Imagen subida',
+        detail: 'La imagen se subió correctamente.',
+      });
+    },
+    error: (err) => {
+      console.error('Error subiendo imagen:', err);
+
+      if (err.status === 401 || err.status === 403) {
         this.messageService.add({
-          severity: 'success',
-          summary: 'Imagen subida',
-          detail: 'La imagen se subió correctamente.',
+          severity: 'error',
+          summary: 'Sesión expirada o no autorizada',
+          detail: 'Tu sesión expiró o no tienes permiso para subir imágenes.',
         });
-      },
-      error: (err) => {
-        console.error('Error subiendo imagen:', err);
+        // this.router.navigate(['/auth/login']);
+      } else {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'No se pudo subir la imagen.',
+          detail: 'No se pudo subir la imagen. Inténtalo nuevamente.',
         });
-      },
-    });
-  }
+      }
+    },
+  });
+}
+
 
   /** 🔹 Calcular precio estimado */
   calcularPrecio(): void {
