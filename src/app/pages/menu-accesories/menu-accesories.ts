@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'; 
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableModule } from 'primeng/table';
@@ -10,11 +10,11 @@ import { ToastModule } from 'primeng/toast';
 import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-import { ProductsService, Product } from '../../services/product';
+import { AccessoriesService, Accessory } from '../../services/accessories';
 import { AuthService } from '../../services/auth';
 
 @Component({
-  selector: 'app-admin-products',
+  selector: 'app-admin-accessories',
   standalone: true,
   imports: [
     CommonModule,
@@ -28,13 +28,11 @@ import { AuthService } from '../../services/auth';
     HttpClientModule,
   ],
   providers: [MessageService],
-  templateUrl: './menu-products.html',
-  styleUrls: ['./menu-products.scss'],
+  templateUrl: './menu-accesories.html',
+  styleUrls: ['./menu-accesories.scss'],
 })
-// ...mantenemos los imports y @Component igual
-
-export class AdminProductsComponent implements OnInit {
-  private productService = inject(ProductsService);
+export class AdminAccessoriesComponent implements OnInit {
+  private accessoryService = inject(AccessoriesService);
   private authService = inject(AuthService);
   private router = inject(Router);
   private messageService = inject(MessageService);
@@ -42,72 +40,61 @@ export class AdminProductsComponent implements OnInit {
 
   uploadApiUrl = 'http://localhost:3000/upload';
 
-  products: Product[] = [];
-  productDialog = false;
+  accessories: Accessory[] = [];
+  accessoryDialog = false;
   editMode = false;
   uploadedImageUrl: string | null = null;
 
-  selectedProduct: Product = {
-    name: '',
-    description: '',
-    price: 0,
-    size: 0,
-    stock: 0,
-    category: '',
-  };
+  // 🔹 Usamos Partial<Accessory> para que 'id' sea opcional dentro del componente
+  selectedAccessory: Partial<Accessory> = { name: '', price: 0 };
 
   ngOnInit(): void {
     if (this.authService.getUserRole() !== 'admin') {
       this.router.navigate(['/']);
       return;
     }
-    this.loadProducts();
+    this.loadAccessories();
   }
 
-  loadProducts() {
-    this.productService.getProductsWithDeleted().subscribe({
-      next: data => (this.products = data),
-      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar productos' }),
+  loadAccessories() {
+    this.accessoryService.getAccessories().subscribe({
+      next: (data) => (this.accessories = data),
+      error: () =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al cargar accesorios',
+        }),
     });
   }
 
   openNew() {
     this.editMode = false;
-    this.selectedProduct = { name: '', description: '', price: 0, size: 0, stock: 0, category: '' };
+    this.selectedAccessory = { name: '', price: 0 }; // id opcional
     this.uploadedImageUrl = null;
-    this.productDialog = true;
+    this.accessoryDialog = true;
   }
 
-  editProduct(product: Product) {
+  editAccessory(accessory: Accessory) {
     this.editMode = true;
-    this.selectedProduct = { ...product };
-    this.uploadedImageUrl = product.image_url || null;
-    this.productDialog = true;
+    this.selectedAccessory = { ...accessory };
+    this.uploadedImageUrl = accessory.imageUrl || null;
+    this.accessoryDialog = true;
   }
 
-  deleteProduct(id: number) {
-    if (!confirm('¿Seguro que deseas eliminar este producto?')) return;
-    this.productService.deleteProduct(id).subscribe({
+  deleteAccessory(id: number) {
+    if (!confirm('¿Seguro que deseas eliminar este accesorio?')) return;
+    this.accessoryService.deleteAccessory(id).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Producto eliminado' });
-        this.loadProducts();
+        this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Accesorio eliminado' });
+        this.loadAccessories();
       },
-      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el producto' }),
-    });
-  }
-
-  restoreProduct(id: number) {
-    this.productService.restoreProduct(id).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Restaurado', detail: 'Producto restaurado correctamente' });
-        this.loadProducts();
-      },
-      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo restaurar el producto' }),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el accesorio' }),
     });
   }
 
   hideDialog() {
-    this.productDialog = false;
+    this.accessoryDialog = false;
   }
 
   uploadImage(event: any) {
@@ -126,12 +113,12 @@ export class AdminProductsComponent implements OnInit {
     formData.append('file', file);
 
     this.http.post<{ imageUrl: string }>(this.uploadApiUrl, formData, { headers }).subscribe({
-      next: res => {
+      next: (res) => {
         this.uploadedImageUrl = res.imageUrl;
-        this.selectedProduct.image_url = res.imageUrl;
+        this.selectedAccessory.imageUrl = res.imageUrl;
         this.messageService.add({ severity: 'success', summary: 'Imagen subida', detail: 'Imagen subida correctamente.' });
       },
-      error: err => {
+      error: (err) => {
         if (err.status === 401) {
           this.messageService.add({ severity: 'error', summary: 'No autorizado', detail: 'Tu sesión expiró.' });
           this.router.navigate(['/auth/login']);
@@ -142,25 +129,29 @@ export class AdminProductsComponent implements OnInit {
     });
   }
 
-  saveProduct() {
-    if (!this.selectedProduct.name || !this.selectedProduct.price || !this.selectedProduct.category) {
+  saveAccessory() {
+    if (!this.selectedAccessory.name || !this.selectedAccessory.price) {
       this.messageService.add({ severity: 'warn', summary: 'Campos incompletos', detail: 'Completa los campos obligatorios' });
       return;
     }
 
-    if (this.uploadedImageUrl) this.selectedProduct.image_url = this.uploadedImageUrl;
+    if (this.uploadedImageUrl) this.selectedAccessory.imageUrl = this.uploadedImageUrl;
 
     const request$ = this.editMode
-      ? this.productService.updateProduct(this.selectedProduct.id_product!, this.selectedProduct)
-      : this.productService.createProduct(this.selectedProduct);
+      ? this.accessoryService.updateAccessory(this.selectedAccessory.id!, this.selectedAccessory)
+      : this.accessoryService.createAccessory(this.selectedAccessory);
 
     request$.subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: this.editMode ? 'Actualizado' : 'Creado', detail: this.editMode ? 'Producto actualizado' : 'Producto añadido' });
-        this.productDialog = false;
-        this.loadProducts();
+        this.messageService.add({
+          severity: 'success',
+          summary: this.editMode ? 'Actualizado' : 'Creado',
+          detail: this.editMode ? 'Accesorio actualizado' : 'Accesorio añadido',
+        });
+        this.accessoryDialog = false;
+        this.loadAccessories();
       },
-      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar el producto' }),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar el accesorio' }),
     });
   }
 }
