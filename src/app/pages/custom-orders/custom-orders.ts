@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,11 +6,11 @@ import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageService } from 'primeng/api';
-import { HttpClient, HttpClientModule,HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { CustomOrdersService, CustomOrder } from '../../services/custom-orders';
 import { OrderAccessoriesService } from '../../services/order-accessories';
 import { AccessoriesService, Accessory } from '../../services/accessories';
-import { CartItemsService } from '../../services/cart-item'; // 🛒 para añadir al carrito
+import { CartItemsService } from '../../services/cart-item';
 
 @Component({
   selector: 'app-custom-orders',
@@ -43,7 +42,7 @@ export class CustomOrdersComponent implements OnInit {
   uploadedImageUrl: string | null = null;
   priceEstimate: number = 0;
 
-  private uploadApiUrl = 'http://localhost:3000/upload'; // ⚙️ Endpoint del backend
+  private uploadApiUrl = 'http://localhost:3000/upload';
 
   newOrder: Partial<CustomOrder> = {
     id_client: 1,
@@ -52,18 +51,16 @@ export class CustomOrdersComponent implements OnInit {
     size: 1,
   };
 
-  // 🔹 Cambiar fecha
-  onDeliveryDateChange(event: any) {
-    const value = event.target.value;
-    this.newOrder.delivery_date = value ? new Date(value) : new Date();
-  }
-
   ngOnInit(): void {
     this.loadCustomOrders();
     this.loadAccessories();
   }
 
-  /** 🔹 Cargar órdenes existentes */
+  onDeliveryDateChange(event: any) {
+    const value = event.target.value;
+    this.newOrder.delivery_date = value ? new Date(value) : new Date();
+  }
+
   loadCustomOrders(): void {
     this.customOrdersService.getCustomOrders().subscribe({
       next: (orders) => (this.customOrders = orders),
@@ -71,7 +68,6 @@ export class CustomOrdersComponent implements OnInit {
     });
   }
 
-  /** 🔹 Cargar accesorios desde la API */
   loadAccessories(): void {
     this.accessoriesService.getAccessories().subscribe({
       next: (data) => (this.accessories = data),
@@ -79,77 +75,32 @@ export class CustomOrdersComponent implements OnInit {
     });
   }
 
-  /** 🔹 Seleccionar o deseleccionar accesorios */
   toggleAccessory(id: number, checked: boolean): void {
     if (checked) {
       if (!this.selectedAccessories.includes(id)) this.selectedAccessories.push(id);
     } else {
       this.selectedAccessories = this.selectedAccessories.filter((a) => a !== id);
     }
-    this.calcularPrecio();
   }
 
-  /** 🔹 Subida real al backend NestJS */
- /** 🔹 Subida real al backend NestJS (con autorización JWT) */
-uploadImage(event: any): void {
-  const file = event.files[0];
-  if (!file) return;
+  uploadImage(event: any): void {
+    const file = event.files[0];
+    if (!file) return;
 
-  // 🔸 Obtener token JWT
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'No autenticado',
-      detail: 'Por favor, inicia sesión para subir imágenes.',
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.http.post<{ imageUrl: string }>(this.uploadApiUrl, formData, { headers }).subscribe({
+      next: (res) => this.uploadedImageUrl = res.imageUrl,
+      error: (err) => console.error('Error subiendo imagen:', err),
     });
-    // Si tienes Router importado (p. ej. via inject Router)
-    // this.router.navigate(['/auth/login']);
-    return;
   }
 
-  // 🔸 Preparar cabeceras con autorización
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`,
-  });
-
-  // 🔸 Preparar archivo para envío
-  const formData = new FormData();
-  formData.append('file', file);
-
-  // 🔸 Hacer petición POST al backend NestJS
-  this.http.post<{ imageUrl: string }>(this.uploadApiUrl, formData, { headers }).subscribe({
-    next: (res) => {
-      this.uploadedImageUrl = res.imageUrl;
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Imagen subida',
-        detail: 'La imagen se subió correctamente.',
-      });
-    },
-    error: (err) => {
-      console.error('Error subiendo imagen:', err);
-
-      if (err.status === 401 || err.status === 403) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Sesión expirada o no autorizada',
-          detail: 'Tu sesión expiró o no tienes permiso para subir imágenes.',
-        });
-        // this.router.navigate(['/auth/login']);
-      } else {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo subir la imagen. Inténtalo nuevamente.',
-        });
-      }
-    },
-  });
-}
-
-
-  /** 🔹 Calcular precio estimado */
+  /** 🔹 Calcular precio manual */
   calcularPrecio(): void {
     const base = 50;
     const sizeFactor = Number(this.newOrder.size) || 1;
@@ -163,18 +114,43 @@ uploadImage(event: any): void {
     this.priceEstimate = base * sizeFactor + totalAccesorios;
   }
 
-  /** 🔹 Crear orden personalizada */
+  /** 🔹 Calcular precio “IA” (simulación frontend) */
+  calcularPrecioIA(): void {
+    if (!this.newOrder.description || !this.newOrder.size) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Datos insuficientes',
+        detail: 'Debe ingresar descripción y tamaño antes de calcular precio IA.',
+      });
+      return;
+    }
+
+    const base = 50;
+    const sizeFactor = Number(this.newOrder.size) || 1;
+    const accesoriosSeleccionados = this.accessories.filter((a) =>
+      this.selectedAccessories.includes(a.id)
+    );
+    const totalAccesorios = accesoriosSeleccionados.reduce((sum, a) => sum + Number(a.price || 0), 0);
+
+    // 🔹 Simulación IA: agrega 20% extra si descripción incluye "premium" o "logo"
+    let extra = 0;
+    const desc = this.newOrder.description.toLowerCase();
+    if (desc.includes('premium')) extra += 0.2;
+    if (desc.includes('logo')) extra += 0.15;
+
+    this.priceEstimate = (base * sizeFactor + totalAccesorios) * (1 + extra);
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Precio estimado IA',
+      detail: `El precio estimado por IA es ${this.priceEstimate.toFixed(2)} USD.`,
+    });
+  }
+
+  /** 🔹 Crear orden */
   crearOrden(): void {
-    if (!this.newOrder.description) {
-      alert('Debe ingresar una descripción.');
-      return;
-    }
-    if (!this.newOrder.size) {
-      alert('Debe ingresar un tamaño.');
-      return;
-    }
-    if (!this.newOrder.delivery_date) {
-      alert('Debe ingresar una fecha válida.');
+    if (!this.newOrder.description || !this.newOrder.size || !this.newOrder.delivery_date) {
+      alert('Debe completar todos los campos antes de crear la orden.');
       return;
     }
 
@@ -187,7 +163,6 @@ uploadImage(event: any): void {
 
     this.customOrdersService.crearCustomOrder(order).subscribe({
       next: (createdOrder) => {
-        // 🔗 Asociar accesorios
         this.selectedAccessories.forEach((idAcc) => {
           this.orderAccessoriesService.crearOrderAccessory({
             id_order: createdOrder.id_order!,
@@ -195,26 +170,13 @@ uploadImage(event: any): void {
           }).subscribe();
         });
 
-        // 🛒 Agregar al carrito
-        this.cartItemsService
-          .createCartItem({
-            cartid: 1,
-            productid: 5,
-            quantity: 1,
-            price: this.priceEstimate,
-          })
-          .subscribe({
-            next: () => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Orden agregada al carrito',
-                detail: 'La orden fue añadida correctamente.',
-              });
-            },
-            error: (err) => console.error('Error agregando al carrito:', err),
-          });
+        this.cartItemsService.createCartItem({
+          cartid: 1,
+          productid: 5,
+          quantity: 1,
+          price: this.priceEstimate,
+        }).subscribe();
 
-        // 🔁 Actualizar lista
         this.customOrders.push(createdOrder);
 
         this.messageService.add({
@@ -228,7 +190,6 @@ uploadImage(event: any): void {
     });
   }
 
-  /** 🔹 Resetear formulario */
   resetForm(): void {
     this.newOrder = { id_client: 1, description: '', delivery_date: new Date(), size: 1 };
     this.uploadedImageUrl = null;
