@@ -15,7 +15,7 @@ interface LoginResponse {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'http://localhost:3000/auth';
+  private apiUrl = 'http://10.20.55.118:3000/auth';
 
   // 🔹 LOGIN
   login(email: string, password: string): Observable<LoginResponse> {

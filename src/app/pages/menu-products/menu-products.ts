@@ -39,7 +39,7 @@ export class AdminProductsComponent implements OnInit {
   private http = inject(HttpClient);
 
   /** URL del endpoint de subida de imágenes */
-  uploadApiUrl = 'http://localhost:3000/upload';
+  uploadApiUrl = 'http://10.20.55.118:3000/upload';
 
   products: Product[] = [];
   productDialog = false;

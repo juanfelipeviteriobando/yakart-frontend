@@ -21,7 +21,7 @@ export interface CustomOrder {
 })
 export class CustomOrdersService {
   private http = inject(HttpClient);
-  private readonly BASE_URL = 'http://localhost:3000/custom-orders';
+  private readonly BASE_URL = 'http://10.20.55.118:3000/custom-orders';
 
   // 🔹 Obtener todas las órdenes personalizadas
   getCustomOrders(): Observable<CustomOrder[]> {

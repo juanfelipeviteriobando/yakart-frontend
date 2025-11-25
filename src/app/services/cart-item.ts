@@ -25,7 +25,7 @@ export interface CreateCartItemDto {
 })
 export class CartItemsService {
   private http = inject(HttpClient);
-  private readonly BASE_URL = 'http://localhost:3000/cart-items';
+  private readonly BASE_URL = 'http://10.20.55.118:3000/cart-items';
 
   /**
    * Obtener todos los items del carrito

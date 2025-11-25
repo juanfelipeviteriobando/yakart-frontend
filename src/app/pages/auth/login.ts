@@ -34,7 +34,7 @@ export class LoginComponent {
   errorMessage = '';
   returnUrl = '/'; // Ruta por defecto si no hay una bloqueada
 
-  private apiUrl = 'http://localhost:3000/auth/login';
+  private apiUrl = 'http://10.20.55.118:3000/auth/login';
 
   constructor(
     private http: HttpClient,

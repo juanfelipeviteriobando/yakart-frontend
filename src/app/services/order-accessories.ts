@@ -14,7 +14,7 @@ export interface OrderAccessory {
 })
 export class OrderAccessoriesService {
   private http = inject(HttpClient);
-  private readonly BASE_URL = 'http://localhost:3000/order-accessories';
+  private readonly BASE_URL = 'http://10.20.55.118:3000/order-accessories';
 
   // 🔹 Obtener todas las relaciones orden-accesorio
   getOrderAccessories(): Observable<OrderAccessory[]> {

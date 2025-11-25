@@ -18,7 +18,7 @@ export interface Product {
 })
 export class ProductsService {
   private http = inject(HttpClient);
-  private readonly BASE_URL = 'http://localhost:3000/products';
+  private readonly BASE_URL = 'http://10.20.55.118:3000/products';
 
   /**
    * Obtener todos los productos

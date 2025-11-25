@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private readonly API_URL = 'http://localhost:3000'; // URL de tu API NestJS
+  private readonly API_URL = 'http://10.20.55.118:3000'; // URL de tu API NestJS
 
   constructor(private http: HttpClient) {}
 

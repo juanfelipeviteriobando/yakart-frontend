@@ -16,7 +16,7 @@ export interface Cliente {
 })
 export class ClientesService {
   private http = inject(HttpClient);
-  private readonly BASE_URL = 'http://localhost:3000/client';
+  private readonly BASE_URL = 'http://10.20.55.118:3000/client';
 
   getClientes(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.BASE_URL);

@@ -15,7 +15,7 @@ export interface Accessory {
 })
 export class AccessoriesService {
   private http = inject(HttpClient);
-  private readonly BASE_URL = 'http://localhost:3000/accessory';
+  private readonly BASE_URL = 'http://10.20.55.118:3000/accessory';
 
   getAccessories(): Observable<Accessory[]> {
     return this.http.get<Accessory[]>(this.BASE_URL);
