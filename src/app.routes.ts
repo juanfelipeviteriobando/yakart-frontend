@@ -13,6 +13,7 @@ import { CartComponent } from './app/pages/cart/cart';
 import { HomeComponent } from './app/pages/home/home';
 import { authGuard } from './app/guards/auth.guard';
 import { AdminProductsComponent } from './app/pages/menu-products/menu-products';
+import { AdminAccessoriesComponent } from './app/pages/menu-accesories/menu-accesories';
 import { ContactComponent } from './app/pages/contact/contact';
 import { ProfileComponent } from './app/pages/profile/profile';
 import { SearchComponent } from './app/pages/search/search';

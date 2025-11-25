@@ -1,16 +1,18 @@
 <div class="register-container fade-in">
   <div class="register-card">
+    <!-- Logo y títulos -->
     <div class="text-center mb-4">
-      <img src="../../../../img/yakart-logo.png" alt="logo" height="50" class="mb-3" />
+      <img src="../../../../img/yakart-logo.png" alt="logo YakArt" height="50" class="mb-3" />
       <h2 class="title">Bienvenido de nuevo</h2>
       <p class="subtitle">Inicia sesión para continuar</p>
     </div>
 
+    <!-- Formulario de inicio de sesión -->
     <div class="form-group">
       <label for="email">Correo electrónico</label>
       <input
         id="email"
-        type="text"
+        type="email"
         pInputText
         [(ngModel)]="email"
         placeholder="correo@ejemplo.com"
@@ -27,6 +29,7 @@
       ></p-password>
     </div>
 
+    <!-- Recordarme y olvidar contraseña -->
     <div class="flex align-items-center justify-content-between mb-4">
       <div class="flex align-items-center">
         <p-checkbox
@@ -43,6 +46,7 @@
     </div>
 
 
+    <!-- Botón de login -->
     <button
       pButton
       pRipple
@@ -51,6 +55,7 @@
       (click)="login()"
     ></button>
 
+    <!-- Mensaje de error -->
     <div *ngIf="errorMessage" class="text-red-500 text-center mt-3">
       {{ errorMessage }}
     </div>

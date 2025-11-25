@@ -30,6 +30,10 @@ import { RouterLink } from '@angular/router';
     <h3 class="text-pink-700 font-semibold">Soporte 24/7</h3>
     <p class="text-sm text-gray-600">Atención personalizada para ti</p>
   </div>
+
+</div>
+<div class="yak-footer-inner mt-10">
+  
 </div>
 
     <div class="yak-footer-inner">

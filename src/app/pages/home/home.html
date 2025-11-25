@@ -20,7 +20,35 @@
     </div>
   </section>
 
-  <!-- Sección de otros productos (carousel) -->
+<!-- Sección de otros productos -->
+<section class="otros">
+  <h2>Otros Productos</h2>
+  <p-carousel [value]="otrosProductos" [numVisible]="3" [numScroll]="1"
+              [circular]="true" [responsiveOptions]="carouselResponsiveOptions">
+    <ng-template pTemplate="item" let-product>
+      <div class="slide-card" (click)="irAProducto(product.id_product!)">
+        <img [src]="product.image_url" [alt]="product.name" />
+        <h3>{{ product.name }}</h3>
+        <p>${{ product.price }}</p>
+      </div>
+    </ng-template>
+  </p-carousel>
+</section>
+
+<!-- Sección de custom orders -->
+<section class="custom-orders">
+  <h2>#YakArt</h2>
+  <p-carousel [value]="customOrders" [numVisible]="5" [numScroll]="5"
+              [circular]="true" [responsiveOptions]="carouselResponsiveOptions">
+    <ng-template pTemplate="item" let-order>
+      <div class="slide-card">
+        <img [src]="order.image_url" [alt]="order.description" />
+        <p>{{ order.description }}</p>
+      </div>
+    </ng-template>
+  </p-carousel>
+</section>
+  <!-- Sección de otros productos (carousel) 
   <section class="otros">
     <h2>Otros productos</h2>
     <div class="carousel">
@@ -32,9 +60,9 @@
         </div>
       </div>
     </div>
-  </section>
+  </section>-->
 
-  <!-- Sección de custom orders aleatorios -->
+  <!-- Sección de custom orders aleatorios 
   <section class="custom-orders">
     <h2>#YakArt</h2>
     <div class="orders-grid">
@@ -43,5 +71,5 @@
         <p>{{ o.description }}</p>
       </div>
     </div>
-  </section>
+  </section>-->
 </div>
