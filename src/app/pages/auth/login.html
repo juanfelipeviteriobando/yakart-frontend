@@ -36,12 +36,12 @@
           inputId="remember"
         ></p-checkbox>
         <label for="remember" class="ml-2 text-900">Recordarme</label>
-      </div>
-
-      <a class="font-medium no-underline text-blue-500 cursor-pointer">
-        ¿Olvidaste tu contraseña?
-      </a>
+      </div>      
     </div>
+    <div class="forgot-container">
+    <a routerLink="/forgot-password" class="forgot-link">¿Olvidaste tu contraseña?</a>
+    </div>
+
 
     <button
       pButton
@@ -55,10 +55,15 @@
       {{ errorMessage }}
     </div>
 
-    <div class="text-center mt-4">
-      <span class="divider-text">¿No tienes cuenta?</span>
-      <br />
-      <a [routerLink]="['/auth/register']" class="white-btn mt-3">Regístrate</a>
-    </div>
+    <div class="register-section">
+  <span class="divider-text">¿No tienes cuenta?</span>
+  <button
+    pButton
+    pRipple
+    label="Regístrate"
+    class="white-btn mt-2"
+    [routerLink]="['/auth/register']"
+  ></button>
+</div>
   </div>
 </div>

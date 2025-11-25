@@ -36,6 +36,20 @@ export const appRoutes: Routes = [
       { path: 'product/:id', component: ProductComponent },
       { path: 'search', component: SearchComponent },
       { path: 'profile', component: ProfileComponent,canActivate: [authGuard] },
+      {
+        path: 'reset-password/:token',
+        loadComponent: () =>
+          import('./app/pages/reset-password/reset-password.component')
+          .then(m => m.ResetPasswordComponent)
+      },
+      {
+        path: 'forgot-password',
+        loadComponent: () =>
+          import('./app/pages/forgot-password/forgot-password.component')
+          .then(m => m.ForgotPasswordComponent)
+      },
+
+
       // 🔸 Ruta protegida solo para administradores
       {
         path: 'menu-products',
