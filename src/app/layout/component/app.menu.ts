@@ -78,6 +78,7 @@ export class AppMenu implements OnInit {
       },
       {
         label: 'Clientes',
+        visible: userRole === 'admin',
         items: [
           { label: 'Lista de clientes', icon: 'pi pi-fw pi-users', routerLink: ['/clientes'], visible: userRole === 'admin' },
         ],
@@ -88,6 +89,7 @@ export class AppMenu implements OnInit {
         items: [
           { label: 'Gestión de productos', icon: 'pi pi-fw pi-box', routerLink: ['/menu-products'] },
           { label: 'Pedidos de clientes', icon: 'pi pi-fw pi-list', routerLink: ['/menu-custom-orders'] },
+          { label: 'accesorios', icon: 'pi pi-fw pi-box', routerLink: ['/menu-accesories'] },
         ],
       },
       {

@@ -49,6 +49,7 @@
   width: 100%;
   background: #c63b52;
   border: none;
+  border-color: #ff2e63 !important;
   font-weight: 600;
   border-radius: 1rem;
   transition: all 0.2s ease-in-out;
@@ -67,7 +68,8 @@
   font-weight: 600;
 
   &:hover {
-    background: #ffeef0;
+    background: #e6295a !important;
+    border-color: #e6295a !important;
   }
 }
 
@@ -83,4 +85,41 @@
 @keyframes fade {
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.forgot-container {
+  text-align: right;
+  margin-top: -0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.forgot-link {
+  color: #c63b52;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    text-decoration: underline;
+    color: #e04a6b;
+  }
+}
+
+/* Sección inferior (¿No tienes cuenta?) */
+.register-section {
+  margin-top: 1.8rem;
+  text-align: center;
+
+  .divider-text {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Ajuste opcional para alinear mejor los campos */
+.form-group input,
+.form-group p-password {
+  margin-bottom: 0.2rem;
 }

@@ -13,6 +13,7 @@ import { CartComponent } from './app/pages/cart/cart';
 import { HomeComponent } from './app/pages/home/home';
 import { authGuard } from './app/guards/auth.guard';
 import { AdminProductsComponent } from './app/pages/menu-products/menu-products';
+import { AdminAccessoriesComponent } from './app/pages/menu-accesories/menu-accesories';
 import { ContactComponent } from './app/pages/contact/contact';
 import { ProfileComponent } from './app/pages/profile/profile';
 import { SearchComponent } from './app/pages/search/search';
@@ -36,6 +37,20 @@ export const appRoutes: Routes = [
       { path: 'product/:id', component: ProductComponent },
       { path: 'search', component: SearchComponent },
       { path: 'profile', component: ProfileComponent,canActivate: [authGuard] },
+      {
+        path: 'reset-password/:token',
+        loadComponent: () =>
+          import('./app/pages/reset-password/reset-password.component')
+          .then(m => m.ResetPasswordComponent)
+      },
+      {
+        path: 'forgot-password',
+        loadComponent: () =>
+          import('./app/pages/forgot-password/forgot-password.component')
+          .then(m => m.ForgotPasswordComponent)
+      },
+
+
       // 🔸 Ruta protegida solo para administradores
       {
         path: 'menu-products',
@@ -50,6 +65,16 @@ export const appRoutes: Routes = [
       {
         path: 'menu-custom-orders',
         component: AdminCustomOrdersComponent,
+        canActivate: [() => {
+          const auth = inject(AuthService);
+          if (auth.getUserRole() === 'admin') return true;
+          alert('Acceso denegado: esta sección es solo para administradores.');
+          return false;
+        }],
+      },
+      {
+        path: 'menu-accesories',
+        component: AdminAccessoriesComponent,
         canActivate: [() => {
           const auth = inject(AuthService);
           if (auth.getUserRole() === 'admin') return true;

@@ -1,0 +1,75 @@
+<div class="admin-accessories-page">
+  <div class="container">
+    <div class="header text-center">
+      <h1>MENÚ ACCESORIOS</h1>
+      <p>Administra tus accesorios</p>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header flex justify-between items-center mb-3">
+        <h2>Lista de accesorios</h2>
+        <button pButton icon="pi pi-plus" class="p-button-rounded p-button-success" (click)="openNew()"></button>
+      </div>
+
+      <p-table [value]="accessories" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-accessory>
+          <tr>
+            <td>{{ accessory.name }}</td>
+            <td>{{ accessory.description || '—' }}</td>
+            <td>\${{ accessory.price }}</td>
+            <td>
+              <img *ngIf="accessory.imageUrl" [src]="accessory.imageUrl" width="60" class="rounded shadow" />
+            </td>
+            <td class="flex gap-2">
+              <button pButton icon="pi pi-pencil" class="p-button-warning p-button-rounded" (click)="editAccessory(accessory)"></button>
+              <button pButton icon="pi pi-trash" class="p-button-danger p-button-rounded" (click)="deleteAccessory(accessory.id!)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- DIALOG -->
+    <p-dialog [(visible)]="accessoryDialog" [modal]="true" [style]="{ width: '500px' }" header="{{ editMode ? 'Editar Accesorio' : 'Nuevo Accesorio' }}">
+      <div class="dialog-form flex flex-col gap-3">
+        <div>
+          <label>Nombre *</label>
+          <input pInputText [(ngModel)]="selectedAccessory.name" />
+        </div>
+        <div>
+          <label>Descripción</label>
+          <textarea pInputTextarea [(ngModel)]="selectedAccessory.description" rows="3"></textarea>
+        </div>
+        <div>
+          <label>Precio *</label>
+          <input type="number" pInputText [(ngModel)]="selectedAccessory.price" />
+        </div>
+        <div>
+          <label>Imagen</label>
+          <p-fileupload mode="advanced" name="file" accept="image/*" maxFileSize="2000000"
+                        chooseLabel="Seleccionar" uploadLabel="Subir" cancelLabel="Cancelar"
+                        [customUpload]="true" (uploadHandler)="uploadImage($event)">
+          </p-fileupload>
+          <div *ngIf="uploadedImageUrl" class="image-preview">
+            <img [src]="uploadedImageUrl" alt="Vista previa" />
+          </div>
+        </div>
+      </div>
+
+      <ng-template pTemplate="footer">
+        <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton label="Guardar" icon="pi pi-check" (click)="saveAccessory()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

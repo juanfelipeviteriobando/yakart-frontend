@@ -1,16 +1,18 @@
 <div class="register-container fade-in">
   <div class="register-card">
+    <!-- Logo y títulos -->
     <div class="text-center mb-4">
-      <img src="../../../../img/yakart-logo.png" alt="logo" height="50" class="mb-3" />
+      <img src="../../../../img/yakart-logo.png" alt="logo YakArt" height="50" class="mb-3" />
       <h2 class="title">Bienvenido de nuevo</h2>
       <p class="subtitle">Inicia sesión para continuar</p>
     </div>
 
+    <!-- Formulario de inicio de sesión -->
     <div class="form-group">
       <label for="email">Correo electrónico</label>
       <input
         id="email"
-        type="text"
+        type="email"
         pInputText
         [(ngModel)]="email"
         placeholder="correo@ejemplo.com"
@@ -27,6 +29,7 @@
       ></p-password>
     </div>
 
+    <!-- Recordarme y olvidar contraseña -->
     <div class="flex align-items-center justify-content-between mb-4">
       <div class="flex align-items-center">
         <p-checkbox
@@ -36,13 +39,14 @@
           inputId="remember"
         ></p-checkbox>
         <label for="remember" class="ml-2 text-900">Recordarme</label>
-      </div>
-
-      <a class="font-medium no-underline text-blue-500 cursor-pointer">
-        ¿Olvidaste tu contraseña?
-      </a>
+      </div>      
+    </div>
+    <div class="forgot-container">
+    <a routerLink="/forgot-password" class="forgot-link">¿Olvidaste tu contraseña?</a>
     </div>
 
+
+    <!-- Botón de login -->
     <button
       pButton
       pRipple
@@ -51,14 +55,20 @@
       (click)="login()"
     ></button>
 
+    <!-- Mensaje de error -->
     <div *ngIf="errorMessage" class="text-red-500 text-center mt-3">
       {{ errorMessage }}
     </div>
 
-    <div class="text-center mt-4">
-      <span class="divider-text">¿No tienes cuenta?</span>
-      <br />
-      <a [routerLink]="['/auth/register']" class="white-btn mt-3">Regístrate</a>
-    </div>
+    <div class="register-section">
+  <span class="divider-text">¿No tienes cuenta?</span>
+  <button
+    pButton
+    pRipple
+    label="Regístrate"
+    class="white-btn mt-2"
+    [routerLink]="['/auth/register']"
+  ></button>
+</div>
   </div>
 </div>

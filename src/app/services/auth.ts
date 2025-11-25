@@ -62,11 +62,16 @@ export class AuthService {
   }
 
   // 🔹 RESET PASSWORD
-  resetPassword(token: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword }).pipe(
-      catchError(err => throwError(() => new Error(err.error?.message || 'Error resetting password')))
-    );
-  }
+  resetPassword(token: string, password: string): Observable<any> {
+  const body = { token, password };
+  console.log('resetPassword body:', body);
+  return this.http.post<any>(`${this.apiUrl}/reset-password`, body).pipe(
+    catchError((error) => {
+      console.error('Error en resetPassword:', error);
+      return throwError(() => error);
+    })
+  );
+}
 
   // 🔹 HELPER METHODS
   getToken(): string | null {

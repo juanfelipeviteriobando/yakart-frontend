@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableModule } from 'primeng/table';
@@ -29,8 +29,10 @@ import { AuthService } from '../../services/auth';
   ],
   providers: [MessageService],
   templateUrl: './menu-products.html',
-  styleUrl: './menu-products.scss',
+  styleUrls: ['./menu-products.scss'],
 })
+// ...mantenemos los imports y @Component igual
+
 export class AdminProductsComponent implements OnInit {
   private productService = inject(ProductsService);
   private authService = inject(AuthService);
@@ -38,7 +40,6 @@ export class AdminProductsComponent implements OnInit {
   private messageService = inject(MessageService);
   private http = inject(HttpClient);
 
-  /** URL del endpoint de subida de imágenes */
   uploadApiUrl = 'http://10.20.55.118:3000/upload';
 
   products: Product[] = [];
@@ -56,8 +57,7 @@ export class AdminProductsComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    const role = this.authService.getUserRole();
-    if (role !== 'admin') {
+    if (this.authService.getUserRole() !== 'admin') {
       this.router.navigate(['/']);
       return;
     }
@@ -65,27 +65,15 @@ export class AdminProductsComponent implements OnInit {
   }
 
   loadProducts() {
-    this.productService.getProducts().subscribe({
-      next: (data) => (this.products = data),
-      error: () =>
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar productos',
-        }),
+    this.productService.getProductsWithDeleted().subscribe({
+      next: data => (this.products = data),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar productos' }),
     });
   }
 
   openNew() {
     this.editMode = false;
-    this.selectedProduct = {
-      name: '',
-      description: '',
-      price: 0,
-      size: 0,
-      stock: 0,
-      category: '',
-    };
+    this.selectedProduct = { name: '', description: '', price: 0, size: 0, stock: 0, category: '' };
     this.uploadedImageUrl = null;
     this.productDialog = true;
   }
@@ -98,78 +86,57 @@ export class AdminProductsComponent implements OnInit {
   }
 
   deleteProduct(id: number) {
-    if (confirm('¿Seguro que deseas eliminar este producto?')) {
-      this.productService.deleteProduct(id).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Eliminado',
-            detail: 'Producto eliminado',
-          });
-          this.loadProducts();
-        },
-        error: () =>
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudo eliminar el producto',
-          }),
-      });
-    }
+    if (!confirm('¿Seguro que deseas eliminar este producto?')) return;
+    this.productService.deleteProduct(id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Producto eliminado' });
+        this.loadProducts();
+      },
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el producto' }),
+    });
+  }
+
+  restoreProduct(id: number) {
+    this.productService.restoreProduct(id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Restaurado', detail: 'Producto restaurado correctamente' });
+        this.loadProducts();
+      },
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo restaurar el producto' }),
+    });
   }
 
   hideDialog() {
     this.productDialog = false;
   }
 
-  /** 🔹 Subida real al backend NestJS (con autorización JWT) */
-  uploadImage(event: any): void {
+  uploadImage(event: any) {
     const file = event.files[0];
     if (!file) return;
 
     const token = localStorage.getItem('access_token');
     if (!token) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'No autenticado',
-        detail: 'Por favor, inicia sesión para subir imágenes.',
-      });
+      this.messageService.add({ severity: 'warn', summary: 'No autenticado', detail: 'Inicia sesión para subir imágenes.' });
       this.router.navigate(['/auth/login']);
       return;
     }
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     const formData = new FormData();
     formData.append('file', file);
 
     this.http.post<{ imageUrl: string }>(this.uploadApiUrl, formData, { headers }).subscribe({
-      next: (res) => {
+      next: res => {
         this.uploadedImageUrl = res.imageUrl;
         this.selectedProduct.image_url = res.imageUrl;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Imagen subida',
-          detail: 'La imagen se subió correctamente.',
-        });
+        this.messageService.add({ severity: 'success', summary: 'Imagen subida', detail: 'Imagen subida correctamente.' });
       },
-      error: (err) => {
-        console.error('Error subiendo imagen:', err);
+      error: err => {
         if (err.status === 401) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'No autorizado',
-            detail: 'Tu sesión expiró o no tienes permiso.',
-          });
+          this.messageService.add({ severity: 'error', summary: 'No autorizado', detail: 'Tu sesión expiró.' });
           this.router.navigate(['/auth/login']);
         } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudo subir la imagen.',
-          });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo subir la imagen.' });
         }
       },
     });
@@ -177,17 +144,11 @@ export class AdminProductsComponent implements OnInit {
 
   saveProduct() {
     if (!this.selectedProduct.name || !this.selectedProduct.price || !this.selectedProduct.category) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Campos incompletos',
-        detail: 'Completa todos los campos obligatorios',
-      });
+      this.messageService.add({ severity: 'warn', summary: 'Campos incompletos', detail: 'Completa los campos obligatorios' });
       return;
     }
 
-    if (this.uploadedImageUrl) {
-      this.selectedProduct.image_url = this.uploadedImageUrl;
-    }
+    if (this.uploadedImageUrl) this.selectedProduct.image_url = this.uploadedImageUrl;
 
     const request$ = this.editMode
       ? this.productService.updateProduct(this.selectedProduct.id_product!, this.selectedProduct)
@@ -195,20 +156,11 @@ export class AdminProductsComponent implements OnInit {
 
     request$.subscribe({
       next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: this.editMode ? 'Actualizado' : 'Creado',
-          detail: this.editMode ? 'Producto actualizado' : 'Producto añadido',
-        });
+        this.messageService.add({ severity: 'success', summary: this.editMode ? 'Actualizado' : 'Creado', detail: this.editMode ? 'Producto actualizado' : 'Producto añadido' });
         this.productDialog = false;
         this.loadProducts();
       },
-      error: () =>
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo guardar el producto',
-        }),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar el producto' }),
     });
   }
 }

@@ -7,8 +7,7 @@ import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageService } from 'primeng/api';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-
+import { HttpClient, HttpClientModule,HttpHeaders } from '@angular/common/http';
 import { CustomOrdersService, CustomOrder } from '../../services/custom-orders';
 import { OrderAccessoriesService } from '../../services/order-accessories';
 import { AccessoriesService, Accessory } from '../../services/accessories';
@@ -87,52 +86,100 @@ export class CustomOrdersComponent implements OnInit {
     } else {
       this.selectedAccessories = this.selectedAccessories.filter((a) => a !== id);
     }
-    this.calcularPrecio();
+
   }
 
   /** 🔹 Subida real al backend NestJS */
-  uploadImage(event: any): void {
-    const file = event.files[0];
-    if (!file) return;
+ /** 🔹 Subida real al backend NestJS (con autorización JWT) */
+uploadImage(event: any): void {
+  const file = event.files[0];
+  if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
+  // 🔸 Obtener token JWT
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'No autenticado',
+      detail: 'Por favor, inicia sesión para subir imágenes.',
+    });
+    // Si tienes Router importado (p. ej. via inject Router)
+    // this.router.navigate(['/auth/login']);
+    return;
+  }
 
-    this.http.post<{ imageUrl: string }>(this.uploadApiUrl, formData).subscribe({
-      next: (res) => {
-        this.uploadedImageUrl = res.imageUrl; // URL del backend (p. ej. http://localhost:3000/uploads/img.png)
+  // 🔸 Preparar cabeceras con autorización
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+  });
+
+  // 🔸 Preparar archivo para envío
+  const formData = new FormData();
+  formData.append('file', file);
+
+  // 🔸 Hacer petición POST al backend NestJS
+  this.http.post<{ imageUrl: string }>(this.uploadApiUrl, formData, { headers }).subscribe({
+    next: (res) => {
+      this.uploadedImageUrl = res.imageUrl;
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Imagen subida',
+        detail: 'La imagen se subió correctamente.',
+      });
+    },
+    error: (err) => {
+      console.error('Error subiendo imagen:', err);
+
+      if (err.status === 401 || err.status === 403) {
         this.messageService.add({
-          severity: 'success',
-          summary: 'Imagen subida',
-          detail: 'La imagen se subió correctamente.',
+          severity: 'error',
+          summary: 'Sesión expirada o no autorizada',
+          detail: 'Tu sesión expiró o no tienes permiso para subir imágenes.',
         });
-      },
-      error: (err) => {
-        console.error('Error subiendo imagen:', err);
+        // this.router.navigate(['/auth/login']);
+      } else {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'No se pudo subir la imagen.',
+          detail: 'No se pudo subir la imagen. Inténtalo nuevamente.',
         });
+      }
+    },
+  });
+}
+
+
+  estimarPrecio(): Promise<number> {
+  return new Promise((resolve) => {
+    if (!this.newOrder.description || !this.newOrder.size || !this.newOrder.delivery_date) {
+      this.priceEstimate = 0;
+      resolve(0);
+      return;
+    }
+
+    const dto = {
+      description: this.newOrder.description,
+      size: this.newOrder.size,
+      delivery_date: this.newOrder.delivery_date,
+      application_date: new Date().toISOString(),
+      accessories: this.selectedAccessories,
+    };
+
+    this.http.post('http://localhost:3000/custom-orders/estimate', dto).subscribe({
+      next: (res: any) => {
+        this.priceEstimate = res.finalPrice;
+        resolve(this.priceEstimate);
       },
+      error: (err) => {
+        console.error('Error al estimar precio', err);
+        this.priceEstimate = 0;
+        resolve(0);
+      }
     });
-  }
+  });
+}
 
-  /** 🔹 Calcular precio estimado */
-  calcularPrecio(): void {
-    const base = 50;
-    const sizeFactor = Number(this.newOrder.size) || 1;
-    const accesoriosSeleccionados = this.accessories.filter((a) =>
-      this.selectedAccessories.includes(a.id)
-    );
-    const totalAccesorios = accesoriosSeleccionados.reduce(
-      (sum, a) => sum + Number(a.price || 0),
-      0
-    );
-    this.priceEstimate = base * sizeFactor + totalAccesorios;
-  }
-
-  /** 🔹 Crear orden personalizada */
+  /** 🔹 Crear orden personalizada 
   crearOrden(): void {
     if (!this.newOrder.description) {
       alert('Debe ingresar una descripción.');
@@ -195,8 +242,49 @@ export class CustomOrdersComponent implements OnInit {
       },
       error: (err) => console.error('Error creando orden:', err),
     });
-  }
+  }*/
 
+  async crearOrden() {
+  const precioFinal = await this.estimarPrecio();
+
+  const aceptar = confirm(
+    `El precio estimado es ${precioFinal.toLocaleString('es-CO', { 
+       style: 'currency', 
+       currency: 'COP' 
+    })}.
+¿Deseas crear esta orden?`
+  );
+
+  if (!aceptar) return;
+
+  const order: CustomOrder = {
+    ...this.newOrder,
+    image_url: this.uploadedImageUrl || null,
+    price: precioFinal,
+    id_client: 3,
+  }as CustomOrder;
+
+  this.customOrdersService.crearCustomOrder(order).subscribe({
+    next: (createdOrder) => {
+      this.selectedAccessories.forEach((idAcc) => {
+        this.orderAccessoriesService.crearOrderAccessory({
+          id_order: createdOrder.id_order!,
+          id_accessory: idAcc,
+        }).subscribe();
+      });
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Orden creada',
+        detail: 'Tu orden fue registrada con éxito',
+      });
+
+      this.customOrders.push(createdOrder);
+      this.resetForm();
+    },
+    error: (err) => console.error('Error creando orden:', err),
+  });
+}
   /** 🔹 Resetear formulario */
   resetForm(): void {
     this.newOrder = { id_client: 1, description: '', delivery_date: new Date(), size: 1 };

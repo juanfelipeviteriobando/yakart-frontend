@@ -1,0 +1,78 @@
+.admin-products-page {
+  padding: 2rem;
+  background-color: #fff0f5;
+  min-height: 100vh;
+
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #c471a2;
+    }
+
+    p {
+      color: #7a2a33;
+    }
+  }
+
+  .table-card {
+    background-color: #fff5f8;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(200, 150, 180, 0.1);
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h2 {
+        color: #c471a2;
+        font-weight: 600;
+      }
+    }
+
+    ::ng-deep .p-table thead th {
+      background-color: #f8dce5;
+      color: #7a2a33;
+      font-weight: 600;
+    }
+
+    ::ng-deep .p-table tbody tr td {
+      color: #7a2a33;
+    }
+  }
+
+  .dialog-form {
+    label {
+      font-weight: 500;
+      color: #7a2a33;
+    }
+
+    input, textarea {
+      border-radius: 0.5rem;
+      border: 1px solid #f8dce5;
+      padding: 0.5rem;
+      width: 100%;
+    }
+
+    .image-preview {
+      margin-top: 1rem;
+      text-align: center;
+
+      img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+      }
+    }
+  }
+
+  ::ng-deep .p-button {
+    border-radius: 0.5rem;
+  }
+}
