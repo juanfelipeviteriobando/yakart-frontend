@@ -78,6 +78,7 @@ export class AppMenu implements OnInit {
       },
       {
         label: 'Clientes',
+        visible: userRole === 'admin',
         items: [
           { label: 'Lista de clientes', icon: 'pi pi-fw pi-users', routerLink: ['/clientes'], visible: userRole === 'admin' },
         ],

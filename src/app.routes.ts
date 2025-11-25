@@ -72,6 +72,16 @@ export const appRoutes: Routes = [
           return false;
         }],
       },
+      {
+        path: 'menu-accesories',
+        component: AdminAccessoriesComponent,
+        canActivate: [() => {
+          const auth = inject(AuthService);
+          if (auth.getUserRole() === 'admin') return true;
+          alert('Acceso denegado: esta sección es solo para administradores.');
+          return false;
+        }],
+      },
     ],
   },
   { path: 'landing', component: Landing },
