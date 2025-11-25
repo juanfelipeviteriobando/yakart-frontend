@@ -86,7 +86,7 @@ export class CustomOrdersComponent implements OnInit {
     } else {
       this.selectedAccessories = this.selectedAccessories.filter((a) => a !== id);
     }
-    this.calcularPrecio();
+
   }
 
   /** 🔹 Subida real al backend NestJS */
@@ -149,21 +149,37 @@ uploadImage(event: any): void {
 }
 
 
-  /** 🔹 Calcular precio estimado */
-  calcularPrecio(): void {
-    const base = 50;
-    const sizeFactor = Number(this.newOrder.size) || 1;
-    const accesoriosSeleccionados = this.accessories.filter((a) =>
-      this.selectedAccessories.includes(a.id)
-    );
-    const totalAccesorios = accesoriosSeleccionados.reduce(
-      (sum, a) => sum + Number(a.price || 0),
-      0
-    );
-    this.priceEstimate = base * sizeFactor + totalAccesorios;
-  }
+  estimarPrecio(): Promise<number> {
+  return new Promise((resolve) => {
+    if (!this.newOrder.description || !this.newOrder.size || !this.newOrder.delivery_date) {
+      this.priceEstimate = 0;
+      resolve(0);
+      return;
+    }
 
-  /** 🔹 Crear orden personalizada */
+    const dto = {
+      description: this.newOrder.description,
+      size: this.newOrder.size,
+      delivery_date: this.newOrder.delivery_date,
+      application_date: new Date().toISOString(),
+      accessories: this.selectedAccessories,
+    };
+
+    this.http.post('http://localhost:3000/custom-orders/estimate', dto).subscribe({
+      next: (res: any) => {
+        this.priceEstimate = res.finalPrice;
+        resolve(this.priceEstimate);
+      },
+      error: (err) => {
+        console.error('Error al estimar precio', err);
+        this.priceEstimate = 0;
+        resolve(0);
+      }
+    });
+  });
+}
+
+  /** 🔹 Crear orden personalizada 
   crearOrden(): void {
     if (!this.newOrder.description) {
       alert('Debe ingresar una descripción.');
@@ -226,8 +242,49 @@ uploadImage(event: any): void {
       },
       error: (err) => console.error('Error creando orden:', err),
     });
-  }
+  }*/
 
+  async crearOrden() {
+  const precioFinal = await this.estimarPrecio();
+
+  const aceptar = confirm(
+    `El precio estimado es ${precioFinal.toLocaleString('es-CO', { 
+       style: 'currency', 
+       currency: 'COP' 
+    })}.
+¿Deseas crear esta orden?`
+  );
+
+  if (!aceptar) return;
+
+  const order: CustomOrder = {
+    ...this.newOrder,
+    image_url: this.uploadedImageUrl || null,
+    price: precioFinal,
+    id_client: 3,
+  }as CustomOrder;
+
+  this.customOrdersService.crearCustomOrder(order).subscribe({
+    next: (createdOrder) => {
+      this.selectedAccessories.forEach((idAcc) => {
+        this.orderAccessoriesService.crearOrderAccessory({
+          id_order: createdOrder.id_order!,
+          id_accessory: idAcc,
+        }).subscribe();
+      });
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Orden creada',
+        detail: 'Tu orden fue registrada con éxito',
+      });
+
+      this.customOrders.push(createdOrder);
+      this.resetForm();
+    },
+    error: (err) => console.error('Error creando orden:', err),
+  });
+}
   /** 🔹 Resetear formulario */
   resetForm(): void {
     this.newOrder = { id_client: 1, description: '', delivery_date: new Date(), size: 1 };

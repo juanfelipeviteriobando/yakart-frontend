@@ -32,7 +32,7 @@ export class CustomOrdersService {
   getCustomOrderById(id: number): Observable<CustomOrder> {
     return this.http.get<CustomOrder>(`${this.BASE_URL}/${id}`);
   }
-
+  
   // 🔹 Crear una nueva orden personalizada
   crearCustomOrder(order: CustomOrder): Observable<CustomOrder> {
     return this.http.post<CustomOrder>(this.BASE_URL, order);

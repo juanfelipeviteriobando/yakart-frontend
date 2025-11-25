@@ -60,6 +60,7 @@ export class AdminCustomOrdersComponent implements OnInit {
           severity: 'success',
           summary: 'Estado actualizado',
           detail: `El pedido fue marcado como "${order.status}".`,
+          
         }),
       error: () =>
         this.messageService.add({
